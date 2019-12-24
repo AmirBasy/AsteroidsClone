@@ -44,10 +44,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ActualScore: 0
-  ScoreToWin: 100
+  ScoreToWin: 10000
   asteroidReference: {fileID: 647470260775687973, guid: f2b06d20f76c83c4b89a041ae673531a,
     type: 3}
-  minTimeAsteroid: 5
-  maxTimeAsteroid: 8
+  alienReference: {fileID: 6213702057058180598, guid: a86e3d876eb02734e998d3375ff5450d,
+    type: 3}
+  minTimeAlien: 10
+  maxTimeAlien: 30
   ActualShip: {fileID: 0}
   asteroids: []
+  canSpawnAlien: 1

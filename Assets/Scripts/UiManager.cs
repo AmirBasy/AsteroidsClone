@@ -3,26 +3,35 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UiManager : MonoBehaviour
+public class UIManager : MonoBehaviour
 {
     public GameObject lifePrefab0, lifePrefab1, lifePrefab2;
-    public Text Score;
-    public string TextInScore = "Score: ";
+    public Text score;
+    public string textInScore = "Score: ";
+    public GameObject pauseMenu;
 
-    GameManager GameManager;
     int playerLife;
 
-    private void Awake()
+    GameManager gameManager;
+
+    void Start()
     {
-        GameManager = FindObjectOfType<GameManager>();
-        
+        gameManager = FindObjectOfType<GameManager>();
+
         SetCurrentShipLife();
+    }
+
+    public void SetCurrentShipLife()
+    {
+        //set life and update UI
+        playerLife = gameManager.actualShip.life;
+        UpdateUI();
     }
 
     public void UpdateUI()
     {
         //enable or disable lifes in UI
-        if (playerLife == 3)
+        if (playerLife >= 3)
         {
             lifePrefab0.SetActive(true);
             lifePrefab1.SetActive(true);
@@ -47,13 +56,12 @@ public class UiManager : MonoBehaviour
             lifePrefab2.SetActive(false);
         }
 
-        Score.text = TextInScore + GameManager.ActualScore;
+        //update score
+        score.text = textInScore + gameManager.actualScore;
     }
 
-    public void SetCurrentShipLife()
+    public void PauseMenu(bool pause)
     {
-        //set life and update UI
-        playerLife = GameManager.ActualShip.Life;
-        UpdateUI();
+        pauseMenu.SetActive(pause);
     }
 }

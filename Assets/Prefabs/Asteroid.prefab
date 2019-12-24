@@ -62,6 +62,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreTogive: 10
+  scoreDestroyed: 100
 --- !u!1 &647470261177020026
 GameObject:
   m_ObjectHideFlags: 0
@@ -164,7 +165,7 @@ GameObject:
   m_Component:
   - component: {fileID: 647470261232260894}
   m_Layer: 0
-  m_Name: Graphic
+  m_Name: Graphics
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

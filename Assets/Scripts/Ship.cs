@@ -4,67 +4,22 @@ using UnityEngine;
 
 public class Ship : MonoBehaviour
 {
-    public Rigidbody rigibody;
-    public GameObject shotReference;
-    public float rotationVelocity = 1800;
+    public int life = 3;
     public float acceleration = 6000;
-    public int Life = 3;
+    public float rotationVelocity = 1800;
+    public bool invincible = false;
+    public GameObject shotReference;
 
-    Camera cam;
+    Rigidbody rb;
+    GameManager gameManager;
 
-    void Rotate(float direction)
-    {
-        rigibody.AddTorque(transform.up * rotationVelocity * Time.deltaTime * direction);
-        //transform.Rotate(Vector3.up * rotationVelocity * Time.deltaTime * direction);
-    }
-
-    void Shot()
-    {
-        //spawn shot and set direction
-        GameObject newShot = Instantiate(shotReference);
-        newShot.transform.position = transform.position + transform.forward;
-
-        newShot.GetComponent<Shot>().direction = transform.forward;
-    }
-
-    void Accelerate()
-    {
-        rigibody.AddForce(transform.forward * acceleration * Time.deltaTime);
-        //transform.Translate(Vector3.forward * acceleration * Time.deltaTime);
-    }
-
-    void CrossScreen()
-    {
-        //from world point to viewport point
-        Vector3 screenPoint = cam.WorldToViewportPoint(transform.position);
-
-        //if out of the screen, teleport to the other side
-        if (screenPoint.x > 1)
-        {
-            transform.position = cam.ViewportToWorldPoint(new Vector3(0, screenPoint.y, screenPoint.z));    //right to left
-        }
-        else if (screenPoint.x < 0)
-        {
-            transform.position = cam.ViewportToWorldPoint(new Vector3(1, screenPoint.y, screenPoint.z));    //left to right
-        }
-        else if (screenPoint.y > 1)
-        {
-            transform.position = cam.ViewportToWorldPoint(new Vector3(screenPoint.x, 0, screenPoint.z));    //up to down
-        }
-        else if (screenPoint.y < 0)
-        {
-            transform.position = cam.ViewportToWorldPoint(new Vector3(screenPoint.x, 1, screenPoint.z));    //down to up
-        }
-    }
-
-
-    // Start is called before the first frame update
     void Start()
     {
-        cam = FindObjectOfType<Camera>();
+        rb = GetComponent<Rigidbody>();
+
+        gameManager = FindObjectOfType<GameManager>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetKey(KeyCode.A)) Rotate(-1);
@@ -73,5 +28,49 @@ public class Ship : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space)) Shot();
 
         CrossScreen();
+    }
+
+    void Accelerate()
+    {
+        rb.AddForce(transform.forward * acceleration * Time.deltaTime);
+    }
+
+    void Rotate(float direction)
+    {
+        rb.AddTorque(transform.up * rotationVelocity * Time.deltaTime * direction);
+    }
+
+    void Shot()
+    {
+        //spawn shot
+        GameObject newShot = Instantiate(shotReference);
+
+        //and set it
+        Vector3 position = transform.position + transform.forward;
+        Vector3 direction = transform.forward;
+        bool isPlayerShot = true;
+
+        newShot.GetComponent<Shot>().CreateShot(position, direction, isPlayerShot);
+    }
+
+    void CrossScreen()
+    {
+        //if out of the screen, teleport to the other side
+        transform.position = gameManager.CrossScreen(transform.position, 1, 0);
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        //if hit shot
+        if (other.gameObject.CompareTag("Shot"))
+        {
+            Shot shot = other.GetComponentInParent<Shot>();
+
+            //if alien shot
+            if (!shot.playerShot)
+            {
+                gameManager.AddDamage();
+            }
+        }
     }
 }

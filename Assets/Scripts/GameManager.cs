@@ -5,46 +5,86 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public int ActualScore = 0;
-    public int ScoreToWin = 100;
+    public int actualScore = 0;
+    public int scoreToWin = 10000;
     public GameObject asteroidReference;
-    public float minTimeAsteroid = 5f;
-    public float maxTimeAsteroid = 8f;
+    public int numberAsteroids = 10;
+    public GameObject alienReference;
+    public float minTimeAlien = 10;
+    public float maxTimeAlien = 30;
 
-     [HideInInspector] public Ship ActualShip;
-    [HideInInspector] public List<Asteroid> asteroids = new List<Asteroid>();
+    [HideInInspector] public Ship actualShip;
+    [HideInInspector] public List<GameObject> asteroids = new List<GameObject>();
+    [HideInInspector] public bool canSpawnAlien = true;
 
-    UiManager uiManager;
-    float timer;
+    bool calledSpawnAsteroids = false;
 
-    public void Awake()
+    UIManager uiManager;
+    Camera cam;
+
+    void Awake()
     {
-        ActualShip = FindObjectOfType<Ship>();
+        //don't destroy, so we can see scores in end scene
+        DontDestroyOnLoad(gameObject);
 
-        uiManager = FindObjectOfType<UiManager>();
+        //check for scene unloaded, so we can destroy when come back to gameplay
+        SceneManager.sceneUnloaded += SceneUnloaded;
+
+        actualShip = FindObjectOfType<Ship>();
+
+        uiManager = FindObjectOfType<UIManager>();
+
+        cam = FindObjectOfType<Camera>();
     }
 
     private void Update()
     {
-        //spawn asteroids
-        SpawnAsteroid();
+        //update only in GamePlay - in other scenes we need only scores
+        if (SceneManager.GetActiveScene().name != "Gameplay")
+            return;
 
-        //check end game
+        //press to pause or resume game
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            bool isPaused = Time.timeScale == 0;
+
+            if (isPaused)
+                ResumeGame();
+            else
+                PauseGame();
+        }
+
+        CheckSpawnAsteroids();
+
+        CheckSpawnAlien();
+
         VictoryCondition();
         LoseCondition();
     }
 
-    void SpawnAsteroid()
+    private void SceneUnloaded(Scene scene)
     {
-        //sometimes
-        if (timer < Time.time && asteroids.Count < 10)
-        {
-            timer = Time.time + Random.Range(minTimeAsteroid, maxTimeAsteroid);
+        //die when come back to gameplay from end scene
+        if (scene.name != "Gameplay")
+            Die();
+    }
 
-            //spawn asteroid
-            GameObject go = Instantiate(asteroidReference);
-            go.GetComponent<Asteroid>().CreateAsteroid();
-        }
+    void Die()
+    {
+        //disable so nobody find this gameManager with findObjectOfType
+        gameObject.SetActive(false);
+
+        //stop check for scene change
+        SceneManager.sceneUnloaded -= SceneUnloaded;
+
+        //than destroy
+        Destroy(gameObject);
+    }
+
+    public void GoToMenu()
+    {
+        Time.timeScale = 1; //if called from pause menù
+        SceneManager.LoadScene("MainMenu");
     }
 
     public void GoToGameplay()
@@ -62,11 +102,53 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("LoseScene");
     }
 
+    public void ExitGame()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+    }
+
+    void PauseGame()
+    {
+        //ferma il tempo e fa apparire il menù di pausa
+        Time.timeScale = 0;
+        uiManager.PauseMenu(true);
+    }
+
+    public void ResumeGame()
+    {
+        //fa ripartire il tempo e sparire il menù di pausa
+        Time.timeScale = 1;
+        uiManager.PauseMenu(false);
+    }
+
+    void CheckSpawnAsteroids()
+    {
+        //when there are no asteroids
+        if (asteroids.Count <= 0 && !calledSpawnAsteroids)
+        {
+            StartCoroutine(SpawnAsteroids());
+        }
+    }
+
+    void CheckSpawnAlien()
+    {
+        //if can spawn alien
+        if(canSpawnAlien)
+        {
+            StartCoroutine(SpawnAlien());
+        }
+    }
+
     void VictoryCondition()
     {
         //score >= win
-        if (ActualScore >= ScoreToWin)
+        if (actualScore >= scoreToWin)
         {
+            StopAllCoroutines();
             Win();
         }
     }
@@ -74,27 +156,91 @@ public class GameManager : MonoBehaviour
     void LoseCondition()
     {
         //life <= 0
-        if (ActualShip.Life <= 0)
+        if (actualShip.life <= 0)
         {
+            StopAllCoroutines();
             Lose();
         }
+    }
+
+    IEnumerator SpawnAsteroids()
+    {
+        calledSpawnAsteroids = true;
+
+        //wait
+        yield return new WaitForSeconds(1);
+
+        //spawn asteroids
+        for (int i = 0; i < numberAsteroids; i++)
+        {
+            GameObject go = Instantiate(asteroidReference);
+            go.GetComponent<Asteroid>().CreateAsteroid();
+        }
+
+        calledSpawnAsteroids = false;
+    }
+
+    IEnumerator SpawnAlien()
+    {
+        canSpawnAlien = false;
+
+        //wait random between min and max
+        yield return new WaitForSeconds(Random.Range(minTimeAlien, maxTimeAlien));
+
+        //spawn alien
+        GameObject go = Instantiate(alienReference);
+        go.GetComponent<Alien>().CreateAlien();
+    }
+
+    IEnumerator RespawnShip()
+    {
+        //disable ship and rigidbody
+        actualShip.enabled = false;
+        Rigidbody shipRb = actualShip.GetComponent<Rigidbody>();
+        shipRb.velocity = Vector3.zero;
+        shipRb.angularVelocity = Vector3.zero;
+
+        //wait
+        yield return new WaitForSeconds(0.5f);
+
+        //make animation - rotate and minimize
+        Transform shipTr = actualShip.transform;
+        while (shipTr.transform.localScale.x > 0.1f)
+        {
+            shipTr.Rotate(Vector3.up * 360 * Time.deltaTime);
+            shipTr.localScale -= new Vector3(0.01f, 0.01f, 0.01f);
+
+            yield return null;
+        }
+
+        //reset animation
+        shipTr.rotation = Quaternion.identity;
+        shipTr.localScale = Vector3.one;
+
+        //and respawn - invincible
+        actualShip.transform.position = Vector3.zero;
+        actualShip.invincible = true;
+        actualShip.enabled = true;
+
+        //remove invincible after few seconds
+        yield return new WaitForSeconds(2);
+        actualShip.invincible = false;
     }
 
     public void AddScore(int score)
     {
         //add score and update UI
-        ActualScore += score;
-
+        actualScore += score;
         uiManager.UpdateUI();
     }
 
     public void AddDamage()
     {
-        if (ActualShip.enabled)
+        //only if enabled and not invincible
+        if (actualShip.enabled && !actualShip.invincible)
         {
-            //toglie una vita alla nave e aggiorna UI
-            ActualShip.Life -= 1;
-
+            //life -1 and update UI
+            actualShip.life -= 1;
             uiManager.SetCurrentShipLife();
 
             //disable ship and respawn after few seconds
@@ -102,19 +248,84 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    IEnumerator RespawnShip()
+    public Vector3 CrossScreen(Vector3 position, float max, float min)
     {
-        //disable ship and rigidbody
-        ActualShip.enabled = false;
-        Rigidbody shipRb = ActualShip.GetComponent<Rigidbody>();
-        shipRb.velocity = Vector3.zero;
-        shipRb.angularVelocity = Vector3.zero;
+        Vector3 newPosition = position;
 
-        //wait
-        yield return new WaitForSeconds(1f);
+        //from world point to viewport point
+        Vector3 screenPoint = cam.WorldToViewportPoint(position);
 
-        //and respawn
-        ActualShip.transform.position = Vector3.zero;
-        ActualShip.enabled = true;
+        //if out of the screen, teleport to the other side
+        if (screenPoint.x > max)
+        {
+            newPosition = cam.ViewportToWorldPoint(new Vector3(min, screenPoint.y, screenPoint.z));    //right to left
+        }
+        else if (screenPoint.x < min)
+        {
+            newPosition = cam.ViewportToWorldPoint(new Vector3(max, screenPoint.y, screenPoint.z));    //left to right
+        }
+        else if (screenPoint.y > max)
+        {
+            newPosition = cam.ViewportToWorldPoint(new Vector3(screenPoint.x, min, screenPoint.z));    //up to down
+        }
+        else if (screenPoint.y < min)
+        {
+            newPosition = cam.ViewportToWorldPoint(new Vector3(screenPoint.x, max, screenPoint.z));    //down to up
+        }
+
+        return newPosition;
+    }
+
+    public bool OutScreen(Vector3 position, float max, float min)
+    {
+        //from world point to viewport point
+        Vector3 screenPoint = cam.WorldToViewportPoint(position);
+
+        //if out of the screen, return true
+        if (screenPoint.x > max || screenPoint.x < min || screenPoint.y > max || screenPoint.y < min)
+        {
+            return true;
+        }
+
+        //else return false
+        return false;
+    }
+
+    public Vector3 RandomPosition()
+    {
+        //return random position outside of the screen
+
+        //-1 == down, 0 = in screen, 1 = up
+        int y = Random.Range(-1, 2);
+
+        Vector3 screenPosition = Vector3.zero;
+
+        if (y == 1)
+        {
+            //up, random x
+            screenPosition.x = Random.Range(0f, 1f);
+            screenPosition.y = 1.5f;
+        }
+        else if (y == -1)
+        {
+            //down, random x
+            screenPosition.x = Random.Range(0f, 1f);
+            screenPosition.y = -1.5f;
+        }
+        else
+        {
+            //random y
+            screenPosition.y = Random.Range(0f, 1f);
+
+            //0 == left, 1 == right
+            screenPosition.x = Random.Range(0, 2) == 0 ? -1.5f : 1.5f;
+
+        }
+
+        //return to world point and set y to 0
+        Vector3 worldPosition = cam.ViewportToWorldPoint(screenPosition);
+        worldPosition.y = 0;
+
+        return worldPosition;
     }
 }

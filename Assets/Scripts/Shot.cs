@@ -4,62 +4,52 @@ using UnityEngine;
 
 public class Shot : MonoBehaviour
 {
-    public float velocity = 50;
+    public float speed = 50;
     public Vector3 direction = Vector3.forward;
+    public bool playerShot = true;
 
-    Camera cam;
+    GameManager gameManager;
 
-    /*
-    private void OnTriggerEnter(Collider other)
+    void Awake()
     {
-        if (other.gameObject.tag == "Limit")
-        {
-            Die();
-        }
+        gameManager = FindObjectOfType<GameManager>();
     }
 
-    private void OnCollisionEnter(Collision collision)
+
+    void Update()
     {
-        if (collision.gameObject.tag == "Limit")
-        {
-            Die();
-        }
+        Move();
+
+        OutScreen();
     }
-    */
+
+    public void CreateShot(Vector3 position, Vector3 newDirection, bool isPlayerShot)
+    {
+        transform.position = position;
+        direction = newDirection;
+        playerShot = isPlayerShot;
+
+        //if is not a player shot, change color
+        if(!playerShot)
+            GetComponentInChildren<Renderer>().material.color = Color.yellow;
+    }
 
     void Move()
     {
-        transform.Translate(direction * velocity * Time.deltaTime);
+        transform.Translate(direction * speed * Time.deltaTime);
+    }
+
+    void OutScreen()
+    {
+        //if out screen, destroy gameObject
+        bool outScreen = gameManager.OutScreen(transform.position, 1.5f, -0.5f);
+
+        if (outScreen)
+            Die();
     }
 
     void Die()
     {
         Destroy(this.gameObject);
-    }
-
-    void OutScreen()
-    {
-        //from world point to viewport point
-        Vector3 screenPoint = cam.WorldToViewportPoint(transform.position);
-
-        //if out of the screen, destroy
-        if (screenPoint.x > 1 || screenPoint.x < 0 || screenPoint.y > 1 || screenPoint.y < 0)
-        {
-            Die();
-        }
-    }
-
-    void Start()
-    {
-        cam = FindObjectOfType<Camera>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        //move and check if out of the screen
-        Move();
-
-        OutScreen();
     }
 }

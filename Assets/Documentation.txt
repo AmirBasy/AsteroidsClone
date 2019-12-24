@@ -1,0 +1,120 @@
+Ship:
+	1	life: contatore vite
+	2	acceleration: velocità di accelerazione
+	3	rotationVelocity: velocità di rotazione
+	4	invincible: per essere invincibili quando si rinasce
+	5	shotReference: prefab dei colpi da sparare
+	6	rb: reference al rigidbody della nave
+	7	gameManager: reference al GameManager in scena
+
+		comportamenti:
+		1	Accelerate: aggiunge una forza per far accelerare la nave
+		2	Rotate: ruota la nave
+		3	Shot: instanzia un colpo e lo setta
+		4	CrossScreen: se esce dallo schermo, riappare dall'altro lato
+		5	OnTriggerEnter: controlla se collide con un trigger
+
+
+Asteroid:
+	1	scoreToGive: i punti da assegnare quando si divide un asteroide
+	2	scoreDestroyed: punti da assegnare quando si distrugge un asteroide
+	3	gameManager: reference al GameManager in scena
+
+		comportamenti:
+		1	CreateAsteroid: da richiamare quando si instanzia un asteroide, per settarlo
+		2	CrossScreen: se esce dallo schermo, riappare dall'altro lato
+		3	OnTriggerEnter: controlla se collide con un trigger
+		4	SplitAsteroid: l'asteroide viene diviso
+		5	CreateHalfAsteroid: per settare gli asteroidi creati quando se ne divide uno più grande
+		6	Die: distruzione dell'asteroide
+
+
+Alien:
+	1	scoreToGive: punti da assegnare quando si elimina l'alieno
+	2	speed: velocità di movimento
+	3	rateOfFire: rateo di fuoco, ogni quanto spara
+	4	shotReference: prefab dei colpi da sparare
+	5	direction: direzione di movimento
+	6	timerShot: utilizzata per sparare in base al rateo
+	7	gameManager: reference al GameManager in scena
+
+		comportamenti:
+		1	CreateAlien: da richiamare quando si instanzia, per settarlo
+		2	Move: il movimento dell'alieno
+		3	CrossScreen: se esce dallo schermo, riappare dall'altro lato
+		4	CheckShot: controlla il timer per vedere se è possibile sparare
+		5	Shot: instanzia un colpo e lo setta
+		6	OnTriggerEnter: controlla se collide con un trigger
+		7	Die: distruzione dell'alieno
+
+
+Shot:
+	1	speed: velocità del colpo
+	2	direction: direzione del colpo
+	3	playerShot: per sapere se è un colpo sparato dal giocatore o da un alieno
+	4	gameManager: reference al GameManager in scena
+
+		comportamenti:
+		1	CreateShot: da richiamare quando si instanzia, per settarlo
+		2	Move: il movimento
+		3	OutScreen: se esce dallo schermo, viene distrutto
+		4	Die: distruzione del colpo
+
+
+UIManager:
+	1	lifePrefab0: prefab UI che mostra un punto vita
+	2	lifePrefab1: prefab UI che mostra un punto vita
+	3	lifePrefab2: prefab UI che mostra un punto vita
+	4	score: UI testo che mostra il punteggio in scena
+	5	textInScore: cosa scrivere nell'UI score
+	6	pauseMenu: UI del menù di pausa
+	7	playerLife: reference ai punti vita del giocatore
+	8	gameManager: reference al GameManager in scena
+
+		comportamenti:
+		1	SetCurrentShipLife: aggiorna la reference alla vita del giocatore
+		2	UpdateUI: aggiorna l'UI, mostrando punti vita e punteggio aggiornati
+		3	PauseMenu: mostra o nasconde il menù di pausa
+
+
+GameManager:
+	1	actualScore: punteggio attuale
+	2	scoreToWin: punteggio necessario per vincere
+	3	asteroidReference: prefab dell'asteroide, per instanziarlo
+	4	numberAsteroids: numero di asteroidi da instanziare in scena
+	5	alienReference: prefab dell'alieno, per instanziarlo
+	6	minTimeAlien: tempo minimo di spawn dell'alieno
+	7	maxTimeAlien: tempo massimo di spawn dell'alieno
+	8	actualShip: reference al giocatore
+	9	asteroids: lista di asteroidi presenti in scena, per sapere quando reinstanziarli
+	10	canSpawnAlien: per sapere quando è possibile instanziare l'alieno
+	11	calledSpawnAsteroids: per sapere se è già stata chiamata la funzione
+	12	uiManager: reference all'UIManager in scena
+	13	cam: reference alla Camera in scena
+
+		comportamenti:
+		1	SceneUnloaded: per distruggere il GameManager al passaggio da end scene a gameplay
+		2	Die: prima si disattiva e poi viene distrutto
+		3	VictoryCondition: controlla se si ha vinto
+		4	LoseCondition: controlla se si ha perso
+		5	GoToMenu: carica la scena del main menù
+		6	GoToGameplay: carica la scena di gameplay
+		7	Win: carica la scena di vittoria
+		8	Lose: carica la scena di sconfitta
+		9	ExitGame: per uscire dal gioco
+		10	PauseGame: mette in pausa il gioco e fa apparire il menù di pausa
+		11	ResumeGame: fa ripartire il gioco e fa sparire il menù di pausa
+		12	CheckSpawnAsteroids: controlla se sia possibile spawnare asteroidi
+		13	CheckSpawnAlien: controlla se sia possibile spawnare alieni
+		14	SpawnAsteroids: instanzia gli asteroidi in scena
+		15	SpawnAlien: instanzia l'alieno in scena
+		16	RespawnShip: quando si subisce danni, riporta la nave al centro schermo
+		17	AddScore: aggiunge il punteggio e fa aggiornare l'UI
+		18	AddDamage: sottrae vita alla nave e fa aggiornare l'UI
+		19	CrossScreen: da chiamare per apparire dall'altro lato dello schermo
+		20	OutScreen: da chiamare per sapere se si è usciti dallo schermo
+		21	RandomPosition: da chiamare per ottenere una posizione random al di fuori dello schermo
+
+
+TextEndScene: 
+	1	semplicemente prende il punteggio dal GameManager per mostrarlo nell'end scene
