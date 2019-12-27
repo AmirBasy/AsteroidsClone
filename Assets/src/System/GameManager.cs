@@ -32,6 +32,8 @@ public class GameManager : MonoBehaviour
         //<---Update Points
         //<---Update UI
     }
+    
+    
 
   
 
