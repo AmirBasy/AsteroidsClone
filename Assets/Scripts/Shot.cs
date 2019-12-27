@@ -39,6 +39,7 @@ public class Shot : MonoBehaviour
     }
 
     void DestroyAsteroid()
+
     {
 
     }
