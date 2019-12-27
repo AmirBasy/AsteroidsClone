@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ScoreData
+public class Character : MonoBehaviour
 {
 
-    public int points;
+    public GameObject mesh;
+
+
 
 }

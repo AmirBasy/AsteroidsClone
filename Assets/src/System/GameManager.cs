@@ -10,17 +10,34 @@ public class GameManager : MonoBehaviour
     public GameObject PlayerShip;
 
     [Header("Game Rules")]
-    public Vector2 ScreenResolution;
-    public int CurrentPoints;
-    public int PointsToNextLevel;
-    public int currentlevel;
+    public static int CurrentPoints;
+    private int PointsToNextLevel;
 
     public void Awake()
     {
 
+        if(SaveLoadManager.SaveGameExists())
+        {
+
+            LoadGameSettings();
+            LoadLevel();
+            
+        }
+
         //<---Read the screen resolution and sets the screen limit
         //<---Load Level Achived
         //<---try to find the ship - if found reference else create
+
+    }
+
+    public void Start()
+    {
+        
+        if(!SaveLoadManager.SaveGameExists())
+        {
+            //generate level
+            SaveLoadManager.Save();
+        }
 
     }
 
@@ -33,8 +50,41 @@ public class GameManager : MonoBehaviour
         //<---Update UI
     }
     
+    /*Pre-construct*/
+    private void BuildLevel()
+    {
+        for (int i=1; i<=20; i++)
+        {
+            //spawn big asteroids
+        }
+    }
     
+    public void SpawnAsteroidDebris()
+    {
 
+    }
+
+    /*data*/
+    private void LoadLevel()
+    {
+        SaveData f = SaveLoadManager.Load();
+
+        PlayerShip.transform.position = f.level.player.position;
+
+        CurrentPoints = f.level.score.score;
+    }
+
+    private void LoadGameSettings()
+    {
+        SaveData f = SaveLoadManager.Load();
+
+        Screen.SetResolution(f.gamesettings.ScreenSize.x, f.gamesettings.ScreenSize.y, false);
+    }
+
+    /*game rules*/
+
+    /*events*/
+    
   
 
 }
