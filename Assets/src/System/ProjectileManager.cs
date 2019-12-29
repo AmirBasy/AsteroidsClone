@@ -20,10 +20,6 @@ public class ProjectileManager : MonoBehaviour
     {
         GameObject _item = Instantiate(_projectilePrefab);
 
-        _item.gameObject.AddComponent<Projectile>();
-
-        _item.gameObject.GetComponent<Projectile>().speed = 1f;
-
         return _item;
     }
 

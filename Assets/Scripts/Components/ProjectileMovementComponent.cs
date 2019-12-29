@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class ProjectileMovementComponent : MonoBehaviour
 {
-    public GameObject _spaceship;
-    public GameObject _gunOffset;
+    private GameObject _spaceship;
+    private GameObject _gunOffset;
 
     private Vector3 _dir;
+
+    public float _speed;
 
     private void Awake()
     {
@@ -20,7 +22,7 @@ public class ProjectileMovementComponent : MonoBehaviour
         return (_gunOffset.transform.position - _spaceship.transform.position).normalized;
     }
 
-    public void UpdateProjectileMovement(Projectile _projectile, float _speed)
+    public void UpdateProjectileMovement(Projectile _projectile)
     {
 
         if(_dir == new Vector3 (0,0,0))

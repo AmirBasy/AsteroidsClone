@@ -47,7 +47,6 @@ public class SpaceshipController : Controller
         if(Input.GetKeyDown(KeyCode.Space))
         {
             _pm.SpawnProjectile(_gunOffset);
-            Debug.Log(_gunOffset.transform.position);
         }
         
     }

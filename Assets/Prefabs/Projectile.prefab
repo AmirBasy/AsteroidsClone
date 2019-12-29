@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5004820301763555533}
+  - component: {fileID: 3082776605179768377}
   - component: {fileID: 249708393778259263}
   m_Layer: 0
   m_Name: Projectile
@@ -32,6 +33,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3082776605179768377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3374000175462789064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86d71ee7e31c92f4c990b3ed51dbefd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &249708393778259263
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44,6 +57,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 362a36273aaa5f2468446cc54e2c08cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _speed: 10
 --- !u!1 &7786176132005042532
 GameObject:
   m_ObjectHideFlags: 0

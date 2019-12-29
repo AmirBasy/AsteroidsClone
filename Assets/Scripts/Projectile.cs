@@ -5,21 +5,10 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
 
-    public float speed;
-
-    private void Start()
-    {
-
-
-
-        
-        
-    }
-
     private void Update()
     {
 
-        this.gameObject.GetComponent<ProjectileMovementComponent>().UpdateProjectileMovement(this, speed);
+        this.gameObject.GetComponent<ProjectileMovementComponent>().UpdateProjectileMovement(this);
 
     }
 
