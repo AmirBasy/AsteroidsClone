@@ -15,6 +15,14 @@ public class SpaceshipController : Controller
     [Header("Runtime")]
     public float _currentSpeed;
 
+    [Header("Melee")]
+    private bool _canShot = true;
+    private bool _isShoting;
+    private ProjectileManager _pm;
+    public GameObject _gunOffset;
+
+    
+
     private void Awake()
     {
         rb = gameObject.AddComponent<Rigidbody2D>();
@@ -22,6 +30,8 @@ public class SpaceshipController : Controller
         rb.mass = 1f;
         rb.gravityScale = 0.0f;
         rb.angularDrag = 1f;
+
+        _pm = this.gameObject.GetComponent<ProjectileManager>();
 
     }
 
@@ -33,6 +43,13 @@ public class SpaceshipController : Controller
         ThrustForward(_forwardAxis);
         Rotate(transform, _rightAxis * _rotationSpeed);
         ClampVelocity();
+
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            _pm.SpawnProjectile(_gunOffset);
+            Debug.Log(_gunOffset.transform.position);
+        }
+        
     }
 
     private void ClampVelocity()
@@ -47,7 +64,6 @@ public class SpaceshipController : Controller
     {
 
         rb.AddRelativeForce(Vector2.up * amount * 3);
-        Debug.Log(Vector2.up * amount);
         
     }
 
@@ -55,5 +71,7 @@ public class SpaceshipController : Controller
     {
         t.Rotate(0, amount, 0);
     }
+
+    
 
 }
