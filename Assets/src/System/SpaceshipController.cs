@@ -16,7 +16,7 @@ public class SpaceshipController : Controller
     public float _currentSpeed;
 
     [Header("Melee")]
-    private bool _canShot = true;
+    //private bool _canShot = true;
     private bool _isShoting;
     private ProjectileManager _pm;
     public GameObject _gunOffset;
