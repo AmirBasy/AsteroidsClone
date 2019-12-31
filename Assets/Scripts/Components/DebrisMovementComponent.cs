@@ -50,7 +50,7 @@ public class DebrisMovementComponent : MonoBehaviour
     }
     protected void ApplyRadialDamage()
     {
-        _owner.gameObject.GetComponent<Rigidbody>().AddRelativeForce(_direction * _speed * Time.deltaTime);
+        gameObject.transform.position = _direction * _speed * Time.deltaTime;
         Debug.Log("force: " + (_direction * _speed * Time.deltaTime));
     }
     #endregion

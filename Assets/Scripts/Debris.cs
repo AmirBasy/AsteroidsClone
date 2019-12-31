@@ -10,7 +10,10 @@ public class Debris : Obstacle
 
     private void OnCollisionEnter(Collision collision)
     {
-        
+        if(collision.gameObject.GetComponent<Projectile>() != null)
+        {
+            Destroy(this.gameObject);
+        }
     }
 
     private void Update()

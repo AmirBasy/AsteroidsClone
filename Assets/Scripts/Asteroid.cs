@@ -53,7 +53,7 @@ public class Asteroid : Obstacle
 
         float _angleScissor = 90f / _debrisMaxCount;
 
-        Vector3 _orientation = ((_collisionPoint.normalized * 0.1f) + _collisionPoint);
+        Vector3 _orientation = _collisionPoint;
 
         _orientation = new Vector3(_orientation.x * Mathf.Cos(-45) + _orientation.y * Mathf.Sin(-45), _orientation.x * -Mathf.Sin(-45) + _orientation.y * Mathf.Cos(-45), 0.0f);
 
