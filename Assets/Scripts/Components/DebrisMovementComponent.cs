@@ -27,6 +27,12 @@ public class DebrisMovementComponent : MonoBehaviour
             ApplyRadialDamage();
         }
     }
+    
+    protected void Update()
+    {
+        UpdateMovement();
+    }
+    
     protected void FixedUpdate()
     {
         if (_lifetime > 0.0f)
@@ -50,8 +56,8 @@ public class DebrisMovementComponent : MonoBehaviour
     }
     protected void ApplyRadialDamage()
     {
-        gameObject.transform.position = _direction * _speed * Time.deltaTime;
-        Debug.Log("force: " + (_direction * _speed * Time.deltaTime));
+        gameObject.transform.position += -_direction.normalized * _speed * Time.deltaTime;
+        
     }
     #endregion
     #region Timer

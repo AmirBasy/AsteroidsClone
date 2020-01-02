@@ -7,6 +7,10 @@ public class Asteroid : Obstacle
     public Vector3 _originalSize;
     public Vector3 _minSize; //the size value to have for being destroyed
 
+    public float max_radius = 1;
+    public float min_radius = 1;
+    public float _radius = 0;
+
     #region Unity Callbacks
     private void Start()
     {
@@ -53,21 +57,34 @@ public class Asteroid : Obstacle
 
         float _angleScissor = 90f / _debrisMaxCount;
 
-        Vector3 _orientation = _collisionPoint;
-
-        _orientation = new Vector3(_orientation.x * Mathf.Cos(-45) + _orientation.y * Mathf.Sin(-45), _orientation.x * -Mathf.Sin(-45) + _orientation.y * Mathf.Cos(-45), 0.0f);
+        Vector3 _orientation  = _collisionPoint;
 
         Vector3[] _result = new Vector3[_debrisMaxCount];
 
-        for(int i = 0; i<_debrisMaxCount; i++)
+        Vector3 _hp = _collisionPoint;
+        Vector3 _direction = _hp - transform.position;
+
+        Vector3 _rotatedDirection = Vector3.zero;
+
+        for (int i = 0; i<_debrisMaxCount; i++)
         {
             if(i==0)
             {
-                _result[i] = _orientation;
+                //_result[i] = new Vector3(Mathf.Cos(-45) + Mathf.Sin(-45), -Mathf.Sin(-45) + Mathf.Cos(-45), 0.0f) * Random.Range(min_radius, max_radius);
+
+                _rotatedDirection = new Vector3(_direction.x * Mathf.Cos(-45) + _direction.y * Mathf.Sin(-45), _direction.x * -Mathf.Sin(-45) + _direction.y * Mathf.Cos(-45), 0.0f);
+
+                _result[i] = _rotatedDirection * (_radius + 1);
+                
             }
             else
             {
-                _result[i] = new Vector3(_orientation.x * Mathf.Cos(_angleScissor * (i + 1)) + _orientation.y * Mathf.Sin(_angleScissor * (i + 1)), _orientation.x * -Mathf.Sin(_angleScissor * (i + 1)) + _orientation.y * Mathf.Cos(_angleScissor * (i + 1)), 0.0f);
+                //y+++_result[i] = new Vector3(_orientation.x * Mathf.Cos(_angleScissor * (i + 1)) + _orientation.y * Mathf.Sin(_angleScissor * (i + 1)), _orientation.x * -Mathf.Sin(_angleScissor * (i + 1)) + _orientation.y * Mathf.Cos(_angleScissor * (i + 1)), 0.0f);
+
+                _rotatedDirection = new Vector3(_rotatedDirection.x * Mathf.Cos(_angleScissor * (i + 1)) + _rotatedDirection.y * Mathf.Sin(_angleScissor * (i + 1)), _rotatedDirection.x * -Mathf.Sin(_angleScissor * (i + 1)) + _rotatedDirection.y * Mathf.Cos(_angleScissor * (i + 1)), 0.0f);
+
+                _result[i] = _rotatedDirection * (_radius + 1);
+                
             }
         }
 

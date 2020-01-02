@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1750419342462542928}
   - component: {fileID: 6266189501643586795}
   - component: {fileID: 663949715880178024}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Debris
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -71,7 +71,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95a28963a15d2cf459deb24c6dba4f08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 50
+  _speed: 5
   _lifetime: 0
   _canBeDestroyed: 1
 --- !u!1 &1750419343687552734
