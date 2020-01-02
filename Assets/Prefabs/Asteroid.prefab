@@ -106,11 +106,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30f5ee15e859f0d4d893c2e226dd5560, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _originalSize: {x: 0, y: 0, z: 0}
   _minSize: {x: 0.3, y: 0.3, z: 0.3}
-  max_radius: 0.3
-  min_radius: 0.3
-  _radius: 0
+  _radius: 1
   _debrisPrefab: {fileID: 1750419342462542931, guid: ee22adfb1530a2e46a1bfacd199b7c91,
     type: 3}
 --- !u!114 &4896848729023791881

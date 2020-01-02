@@ -4,77 +4,47 @@ using UnityEngine;
 
 public class DebrisMovementComponent : MonoBehaviour
 {
+    [Header("Movement")]
     public float _speed;
 
-    public float _lifetime;
+    public bool _ownerSet = false;
 
-    public bool _canBeDestroyed;
+    public GameObject _owner;
+
+    public Vector3 _direction;
 
     #region Unity Callbacks
 
-    #endregion
-    #region Movement
-    private GameObject _owner;
-
-    private Vector3 _direction;
-
-    private bool _canMove = false;
-
-    private void UpdateMovement()
-    {
-        if(_canMove)
-        {
-            ApplyRadialDamage();
-        }
-    }
-    
-    protected void Update()
-    {
-        UpdateMovement();
-    }
-    
     protected void FixedUpdate()
     {
-        if (_lifetime > 0.0f)
+        if (_ownerSet)
         {
-            ListenTime();
-
-            if(LifetimeIsOver())
-            {
-                Destroy(_owner.gameObject);
-            }
-
+            UpdateMovement();
         }
     }
 
-    public void CALL_RadialDamage (GameObject _target, Vector3 _origin)
-    {
-        _owner = _target;
-        _direction = _origin;
 
-        _canMove = true;
-    }
-    protected void ApplyRadialDamage()
+
+    #endregion
+    #region Movement
+    public void UpdateMovement()
     {
-        gameObject.transform.position += -_direction.normalized * _speed * Time.deltaTime;
-        
+
+        this.gameObject.transform.position += _direction * _speed * Time.deltaTime;
+
+    }
+    public Vector3 GetDirection()
+    {
+        Vector3 _result = this.gameObject.transform.position - _owner.gameObject.transform.position;
+
+        return _result.normalized;
+
+    }
+    public Vector3 GetRotatedVector(Vector3 _v, float _angle)
+    {
+        return new Vector3(_v.x * Mathf.Cos(_angle) + _v.y * Mathf.Sin(_angle), _v.x * -Mathf.Sin(_angle) + _v.y * Mathf.Cos(_angle), 0.0f);
     }
     #endregion
-    #region Timer
-    protected float _time;
-
-    protected void ListenTime()
-    {
-        _time = Time.deltaTime;
-    }
-
-    protected bool LifetimeIsOver()
-    {
-        if (Mathf.Floor(_time) == _lifetime) return true;
-        else return false;
-    }
-    #endregion
-
 
 }
 

@@ -86,7 +86,7 @@ public class GameManager : MonoBehaviour
     
     private void BuildLevel()
     {
-        //y+++for (int i=1; i<=20; i++) FIXME!!!
+        for (int i=1; i<=20; i++)
         {
             SpawnAsteroid(new Vector3(Random.Range(-10, +10), Random.Range(-10, +10),0));
         }
