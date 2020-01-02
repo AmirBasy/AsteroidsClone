@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1750419342462542928}
   - component: {fileID: 6266189501643586795}
   - component: {fileID: 663949715880178024}
+  - component: {fileID: 98841296279502880}
   m_Layer: 8
   m_Name: Debris
   m_TagString: Untagged
@@ -72,8 +73,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 5
-  _lifetime: 0
-  _canBeDestroyed: 1
+  _ownerSet: 0
+  _owner: {fileID: 0}
+  _direction: {x: 0, y: 0, z: 0}
+--- !u!114 &98841296279502880
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1750419342462542931}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cc4ac7964e973c438de3cf847984483, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enableLimitController: 1
 --- !u!1 &1750419343687552734
 GameObject:
   m_ObjectHideFlags: 0

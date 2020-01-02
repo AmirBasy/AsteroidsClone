@@ -43,8 +43,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f157b4306374df479143fc191767c5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ActualShip: {fileID: 0}
-  shots: []
-  asteroids: []
-  ActualScore: 0
-  ScoreToWin: 0
+  _asteroids: []
+  _debris: []
+  _asteroidsCount: 0
+  _debrisCount: 0
+  _enemySpawned: 0
+  _playerPrefab: {fileID: 1130077704798215704, guid: 2cda250a7d7f77d4c8b5be0d81fc5e9a,
+    type: 3}
+  _asteroidPrefab: {fileID: 6368190985764644787, guid: ce98df1db61bce4428a27a3295dce907,
+    type: 3}
+  _enemyPrefab: {fileID: 0}
+  gamecamera: {fileID: 0}
+  CurrentPoints: 0
+  _screenLimit: {x: 10, y: -10}

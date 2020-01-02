@@ -103,6 +103,7 @@ GameObject:
   - component: {fileID: 1130077704798215702}
   - component: {fileID: 7052248201749429066}
   - component: {fileID: 5231705645488992520}
+  - component: {fileID: 6547075030885866165}
   m_Layer: 0
   m_Name: Ship
   m_TagString: Untagged
@@ -118,7 +119,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1130077704798215704}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10, y: 0, z: 0}
+  m_LocalPosition: {x: 50, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1130077704967304353}
@@ -159,6 +160,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _projectilePrefab: {fileID: 3374000175462789064, guid: d671c6cb132802e4abddcd09df5ced0d,
     type: 3}
+--- !u!114 &6547075030885866165
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1130077704798215704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cc4ac7964e973c438de3cf847984483, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enableLimitController: 1
 --- !u!1 &1130077704930582904
 GameObject:
   m_ObjectHideFlags: 0

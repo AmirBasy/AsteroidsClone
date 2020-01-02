@@ -29,7 +29,7 @@ public static class SaveLoadManager
         data.gamesettings.ScreenSize.y = Screen.height;
 
         //player lifes
-        data.level.score.score = _gameManager.CurrentPoints;
+       // data.level.score.score = _gameManager.CurrentPoints;
         data.level.big_obstacles_count = _gameManager._asteroidsCount;
         data.level.small_obstacles_count = _gameManager._debrisCount;
 

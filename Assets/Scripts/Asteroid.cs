@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Asteroid : Obstacle
-{   
+{
     private Vector3 _originalSize;
     public Vector3 _minSize; //the size value to have for being destroyed
-
-
+    
     #region Unity Callbacks
     private void Start()
     {
@@ -24,6 +23,7 @@ public class Asteroid : Obstacle
 
             if (this.gameObject.transform.localScale == _minSize)
             {
+               // _gm._score.AddScore(25);
                 Destroy(this.gameObject);
             }
             else

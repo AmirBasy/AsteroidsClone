@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Debris : Obstacle
 {
-
+    private float _time;
 
     #region Unity Callbacks
 
@@ -12,15 +12,31 @@ public class Debris : Obstacle
     {
         if(collision.gameObject.GetComponent<Projectile>() != null)
         {
+ 
             Destroy(this.gameObject);
         }
     }
 
     private void Update()
     {
-        
+        _time += Time.deltaTime;
+
+        if(TimeIsOver())
+        {
+            Destroy(this.gameObject);
+        }
     }
 
+    #endregion
+    #region Timer
+    protected bool TimeIsOver()
+    {
+        if (Mathf.FloorToInt(_time) == 5)
+        {
+            return true;
+        }
+        else return false;
+    }
     #endregion
 
 

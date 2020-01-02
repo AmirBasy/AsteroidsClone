@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6771696493681008775}
   - component: {fileID: 7495137057513573975}
   - component: {fileID: 4896848729023791881}
+  - component: {fileID: -7396259775358450133}
   m_Layer: 8
   m_Name: Asteroid
   m_TagString: Untagged
@@ -107,9 +108,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _minSize: {x: 0.3, y: 0.3, z: 0.3}
-  _radius: 1
   _debrisPrefab: {fileID: 1750419342462542931, guid: ee22adfb1530a2e46a1bfacd199b7c91,
     type: 3}
+  _radius: 1
 --- !u!114 &4896848729023791881
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -124,3 +125,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _movementSpeed: 5
   _rotationSpeed: 2
+--- !u!114 &-7396259775358450133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6368190985764644787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cc4ac7964e973c438de3cf847984483, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enableLimitController: 1

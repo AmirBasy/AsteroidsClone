@@ -22,9 +22,6 @@ public class DebrisMovementComponent : MonoBehaviour
             UpdateMovement();
         }
     }
-
-
-
     #endregion
     #region Movement
     public void UpdateMovement()

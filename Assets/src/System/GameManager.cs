@@ -20,26 +20,19 @@ public class GameManager : MonoBehaviour
     public GameObject _asteroidPrefab;
     public GameObject _enemyPrefab;
 
-    public Camera gamecamera;
-
     [Header("Game Rules")]
-    public int CurrentPoints;
-    private int PointsToNextLevel;
-    public Vector2 _screenLimit;
+    Score _score = new Score();
+    public string[] _sceneName = new string[10];
 
-    private Vector3 _adjustedPostion;
-
-    public void Awake()
+    #region Unity Callbacks
+    protected void Awake()
     {
-
-        
-
+        Score _score = new Score();
     }
-
     public void Start()
     {
-        
 
+        _playerPrefab.gameObject.transform.position = Vector3.zero;
 
         if(!SaveLoadManager.SaveGameExists())
         {
@@ -58,32 +51,16 @@ public class GameManager : MonoBehaviour
 
     public void Update()
     {
-        //<---Exausted Lifes?
-        //<---control player position
-        _adjustedPostion = _playerPrefab.transform.position;
-
-        if(_playerPrefab.transform.position.x > _screenLimit.x)
+       
+        if(LevelFinished(2000))
         {
-            _adjustedPostion.x = _screenLimit.y;
+            //pause game
+            //display victory
         }
-        if (_playerPrefab.transform.position.z > _screenLimit.x)
-        {
-            
-        }
-        if (_playerPrefab.transform.position.x < _screenLimit.y)
-        {
-            
-        }
-        if (_playerPrefab.transform.position.y < _screenLimit.y)
-        {
-            
-        }
-
-        _playerPrefab.transform.position = _adjustedPostion;
-        //<---Update Points
-        //<---Update UI
+     
     }
-    
+    #endregion
+    #region LevelBuilding
     private void BuildLevel()
     {
         for (int i=1; i<=20; i++)
@@ -99,27 +76,20 @@ public class GameManager : MonoBehaviour
         asteroid.transform.position = position;
     }
 
-    private void SpawnDebris()
-    {
-
-        //<---Spawn Debris by hit
-
-    }
-
     private void SpawnEnemyShip(Vector3 position)
     {
         GameObject _enemyShip = Instantiate(_enemyPrefab) as GameObject;
         _enemyShip.transform.position = position;
     }
-
-    /*data*/
-
-    public static void AdjustCameraToScreenResolution()
+    #endregion
+    #region ScoreController
+    public bool LevelFinished(int _pointsToNextLevel)
     {
-        Debug.Log("set camera FOV to user resolution!");
+        if (_score.GetScore() >= _pointsToNextLevel)
+            return true;
+        else return false;
     }
-
-  
+    #endregion
 
 }
 
