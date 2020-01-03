@@ -6,10 +6,14 @@ public class Asteroid : Obstacle
 {
     private Vector3 _originalSize;
     public Vector3 _minSize; //the size value to have for being destroyed
-    
+
+    GameManager _gm;
+
     #region Unity Callbacks
     private void Start()
     {
+        _gm = Object.FindObjectsOfType<GameManager>()[0];
+
         _originalSize = this.gameObject.transform.localScale;
     }
 
@@ -18,12 +22,11 @@ public class Asteroid : Obstacle
         ContactPoint _hitpoint = collision.GetContact(0);
 
         if (collision.gameObject.GetComponent<Projectile>() != null)
-        {
-            Debug.Log("Projectile!");
+        { 
 
             if (this.gameObject.transform.localScale == _minSize)
             {
-               // _gm._score.AddScore(25);
+                _gm.AddScore(25);
                 Destroy(this.gameObject);
             }
             else

@@ -6,15 +6,22 @@ public class Debris : Obstacle
 {
     private float _time;
 
+    private GameManager _gm;
+
     #region Unity Callbacks
 
     private void OnCollisionEnter(Collision collision)
     {
         if(collision.gameObject.GetComponent<Projectile>() != null)
         {
- 
+            _gm.AddScore(10);
             Destroy(this.gameObject);
         }
+    }
+
+    protected void Start()
+    {
+        _gm = Object.FindObjectsOfType<GameManager>()[0];
     }
 
     private void Update()

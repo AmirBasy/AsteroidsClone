@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     public int _asteroidsCount;
     public int _debrisCount;
 
-    public bool _enemySpawned = false;
+    private bool _enemySpawned = false;
 
     [Header("References")]
     public GameObject _playerPrefab;
@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
     #region Unity Callbacks
     protected void Awake()
     {
-        Score _score = new Score();
+        
     }
     public void Start()
     {
@@ -51,12 +51,26 @@ public class GameManager : MonoBehaviour
 
     public void Update()
     {
+        RecordTime();
        
         if(LevelFinished(2000))
         {
             //pause game
             //display victory
         }
+
+        if(TimeIsOver(5) && !_enemySpawned)
+        {
+            GameObject _enemy = Instantiate(_enemyPrefab);
+            _enemy.gameObject.transform.position = new Vector3(Random.Range(-10, 10), Random.Range(-10, 10), 0.0f);
+
+            _enemySpawned = true;
+
+            ResetTime();
+
+        }
+
+        
      
     }
     #endregion
@@ -89,6 +103,31 @@ public class GameManager : MonoBehaviour
             return true;
         else return false;
     }
+    public void AddScore(int amount)
+    {
+        _score.AddScore(amount);
+        Debug.Log(_score.GetScore());
+    }
+    #endregion
+    #region Timer
+    private float _time;
+
+    void RecordTime()
+    {
+        _time += Time.deltaTime;
+    }
+    void ResetTime()
+    {
+        _time = 0;
+    }
+
+    bool TimeIsOver(float time)
+    {
+        if (Mathf.FloorToInt(_time) == time)
+            return true;
+        else return false;
+    }
+
     #endregion
 
 }
