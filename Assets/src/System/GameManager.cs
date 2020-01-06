@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
 
         _playerPrefab.gameObject.transform.position = Vector3.zero;
 
+        /*
         if(!SaveLoadManager.SaveGameExists())
         {
             BuildLevel();
@@ -44,19 +45,17 @@ public class GameManager : MonoBehaviour
         {
             SaveLoadManager.LoadData(this);
         }
-
-        //BuildLevel();
+        */
 
     }
 
     public void Update()
     {
         RecordTime();
-       
-        if(LevelFinished(2000))
+        
+        if(GetAsteroidsCount() == 0)
         {
-            //pause game
-            //display victory
+            BuildLevel();
         }
 
         if(TimeIsOver(5) && !_enemySpawned)
@@ -75,7 +74,7 @@ public class GameManager : MonoBehaviour
     }
     #endregion
     #region LevelBuilding
-    private void BuildLevel()
+    public void BuildLevel()
     {
         for (int i=1; i<=20; i++)
         {
@@ -106,7 +105,15 @@ public class GameManager : MonoBehaviour
     public void AddScore(int amount)
     {
         _score.AddScore(amount);
-        Debug.Log(_score.GetScore());
+    }
+
+    public int GetScore()
+    {
+        return _score.GetScore();
+    }
+    public void ResetScore()
+    {
+        _score.ResetScore();
     }
     #endregion
     #region Timer
@@ -128,6 +135,12 @@ public class GameManager : MonoBehaviour
         else return false;
     }
 
+    #endregion
+    #region LevelManagement
+    private int GetAsteroidsCount()
+    {
+        return Object.FindObjectsOfType<Asteroid>().Length;
+    }
     #endregion
 
 }
