@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class UiManager : MonoBehaviour
 {
-    public string TextInScore = "Score +";
+    public string TextInScore = "Score :";
     public Text Score;
     public Transform LifeToSpawn;
     GameManager GameManager;
@@ -14,8 +14,8 @@ public class UiManager : MonoBehaviour
 
     private void Awake()
     {
-        Score.text = TextInScore + GameManager.ActualScore;
         GameManager = FindObjectOfType<GameManager>();
+        Score.text = TextInScore + GameManager.ActualScore;
         SetCurrentShipLife();
     }
 
@@ -29,23 +29,36 @@ public class UiManager : MonoBehaviour
         }
         if (playerLife == 2)
         {
+            lifePrefab0.SetActive(true);
             lifePrefab1.SetActive(true);
             lifePrefab2.SetActive(false);
         }
+
         if (playerLife == 1)
         {
+            lifePrefab0.SetActive(true);
+            lifePrefab1.SetActive(false);
             lifePrefab2.SetActive(false);
         }
+
         if (playerLife == 0)
         {
             lifePrefab0.SetActive(false);
+            lifePrefab1.SetActive(false);
+            lifePrefab2.SetActive(false);
         }
-
-
     }
 
     void SetCurrentShipLife()
     {
         playerLife = GameManager.ActualShip.Life;
+    }
+
+    private void Update()
+    {
+        Score.text = TextInScore + GameManager.ActualScore;
+        SetCurrentShipLife();
+        activeUi();
+
     }
 }

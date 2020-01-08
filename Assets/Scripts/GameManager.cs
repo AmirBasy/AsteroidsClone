@@ -7,41 +7,44 @@ public class GameManager : MonoBehaviour
 {
 
     public Ship ActualShip;
-    public int ActualScore;
+    public int ActualScore=0;
     public int ScoreToWin;
+
+
     public void Awake()
     {
         ActualShip = FindObjectOfType<Ship>();
     }
 
+
     private void Update()
     {
-        VictoryCondition();
+        WinCondition();
         LoseCondition();
     }
+
+   
     public void GoToGameplay()
     {
         SceneManager.LoadScene(1);
     }
 
-    public void GoToEndMenu()
-    {
-        SceneManager.LoadScene(2);
-    }
 
-    public void VictoryCondition()
+    public void WinCondition()
     {
-        if (ActualScore >= ScoreToWin)
+        if(ActualScore >= ScoreToWin)
         {
-
+            SceneManager.LoadScene(3);
         }
+        
     }
+
 
     public void LoseCondition()
     {
-        if (ActualShip.Life <= 1)
+        if (ActualShip.Life <= 0)
         {
-            //fai qualcosa
+            SceneManager.LoadScene(2);
         }
     }
 }

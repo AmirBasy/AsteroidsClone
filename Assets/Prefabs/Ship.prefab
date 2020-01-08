@@ -140,9 +140,10 @@ MonoBehaviour:
   rigibody: {fileID: 1130077704798215701}
   rotationVelocity: 1800
   acceleration: 6000
-  positionToSpawn: {fileID: 0}
   shotReference: {fileID: 4392491329962148481, guid: 1bcb3f7ce79affa40b767632e4469664,
     type: 3}
+  Life: 3
+  cam: {fileID: 0}
 --- !u!54 &1130077704798215701
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -249,8 +250,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1, y: 1, z: 1.488348}
+  m_Center: {x: 0, y: 0, z: 0.244174}
 --- !u!1 &1130077704967304354
 GameObject:
   m_ObjectHideFlags: 0

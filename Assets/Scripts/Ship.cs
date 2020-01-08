@@ -8,15 +8,13 @@ public class Ship : MonoBehaviour
     public float rotationVelocity=45;
     public float acceleration;
     public GameObject shotReference;
-    public int Life;
+    public int Life=3;
+    public Camera cam;
 
-    private void Awake()
-    {
-    }
+
     void Rotate(float direction)
     {
         rigibody.AddTorque(transform.up * rotationVelocity * Time.deltaTime * direction);
-        //transform.Rotate(Vector3.up * rotationVelocity * Time.deltaTime * direction);
     }
 
     void Shot()
@@ -27,32 +25,57 @@ public class Ship : MonoBehaviour
     void Accelerate()
     {
         rigibody.AddForce(transform.forward * acceleration * Time.deltaTime);
-        //transform.Translate(Vector3.forward * acceleration * Time.deltaTime);
     }
 
-    void Die()
-    {
-
+    void OnCollisionEnter(Collision collision)
+    { 
+        if (collision.gameObject.tag == "Asteroid")
+        {
+            transform.position = Vector3.zero;
+            Destroy(collision.gameObject);
+            Life--;
+        }
     }
 
     void CrossScreen()
     {
+        Vector3 screenPoint = cam.WorldToViewportPoint(transform.position);                                                             //funzione che permette di sapere se la nave si trova all'interno della camera
+
+        if (screenPoint.x > 1)
+        {
+            transform.position = cam.ViewportToWorldPoint(new Vector3(0, screenPoint.y, screenPoint.z));
+        }
+        else if (screenPoint.x < 0)
+        {
+            transform.position = cam.ViewportToWorldPoint(new Vector3(1, screenPoint.y, screenPoint.z));
+        }
+        else if (screenPoint.y > 1)
+        {
+            transform.position = cam.ViewportToWorldPoint(new Vector3(screenPoint.x, 0, screenPoint.z));
+        }
+        else if (screenPoint.y < 0)
+        {
+            transform.position = cam.ViewportToWorldPoint(new Vector3(screenPoint.x, 1, screenPoint.z));
+        }
+
+        transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+
 
     }
 
 
-    // Start is called before the first frame update
+    
     void Start()
     {
-        
+        cam=FindObjectOfType<Camera>();      
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetKey(KeyCode.A)) Rotate(-1);
         if (Input.GetKey(KeyCode.D)) Rotate(1);
         if (Input.GetKey(KeyCode.W)) Accelerate();
         if (Input.GetKeyDown(KeyCode.Space)) Shot();
+        CrossScreen();
     }
 }
