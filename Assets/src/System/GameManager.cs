@@ -52,11 +52,11 @@ public class GameManager : MonoBehaviour
     public void Update()
     {
         RecordTime();
-        
+        /*
         if(GetAsteroidsCount() == 0)
         {
             BuildLevel();
-        }
+        }*/
 
         if(TimeIsOver(5) && !_enemySpawned)
         {
@@ -69,7 +69,38 @@ public class GameManager : MonoBehaviour
 
         }
 
-        
+        if(LevelFinished(2000))
+        {
+            //destroy big asteroids
+           for(int i = 0; i<GetAsteroidsCount(); i++)
+            {
+                Destroy(Object.FindObjectsOfType<Asteroid>()[i].gameObject);
+            }
+
+           //destroy debris (small asteroids)
+           for(int q = 0; q<GetDebrisCount(); q++)
+            {
+                Destroy(Object.FindObjectsOfType<Debris>()[q].gameObject);
+            }
+
+           //destroy enemy ship
+           if(Object.FindObjectOfType<Enemy>())
+            {
+                Destroy(Object.FindObjectOfType<Enemy>().gameObject);
+            }
+
+           //set the score to zero
+            ResetScore();
+
+            //set player position & rotation
+            GameObject aship = GameObject.Find("Ship").gameObject;
+
+            aship.transform.position = new Vector3(0, 0, 0);
+            aship.transform.rotation = Quaternion.Euler(-90, 0, 0);
+
+            //rebuild level
+            BuildLevel();
+        }
      
     }
     #endregion
@@ -140,6 +171,11 @@ public class GameManager : MonoBehaviour
     private int GetAsteroidsCount()
     {
         return Object.FindObjectsOfType<Asteroid>().Length;
+    }
+
+    private int GetDebrisCount()
+    {
+        return Object.FindObjectsOfType<Debris>().Length;
     }
     #endregion
 
