@@ -1298,10 +1298,20 @@ PrefabInstance:
       propertyPath: GunOffset
       value: 
       objectReference: {fileID: 471585035}
+    - target: {fileID: 1130077704798215703, guid: 2cda250a7d7f77d4c8b5be0d81fc5e9a,
+        type: 3}
+      propertyPath: acceleration
+      value: 10000
+      objectReference: {fileID: 0}
+    - target: {fileID: 1130077704798215703, guid: 2cda250a7d7f77d4c8b5be0d81fc5e9a,
+        type: 3}
+      propertyPath: rotationVelocity
+      value: 6000
+      objectReference: {fileID: 0}
     - target: {fileID: 1130077704798215701, guid: 2cda250a7d7f77d4c8b5be0d81fc5e9a,
         type: 3}
       propertyPath: m_Mass
-      value: 100
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 1130077704930582903, guid: 2cda250a7d7f77d4c8b5be0d81fc5e9a,
         type: 3}
@@ -1352,7 +1362,7 @@ PrefabInstance:
     - target: {fileID: 1294478147247726813, guid: 23ed0e36e1d87d14ca590c6735f3f335,
         type: 3}
       propertyPath: ScoreToWin
-      value: 2000
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 1294478147247726812, guid: 23ed0e36e1d87d14ca590c6735f3f335,
         type: 3}

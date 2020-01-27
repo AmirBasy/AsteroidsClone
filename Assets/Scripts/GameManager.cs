@@ -37,6 +37,12 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(2);
     }
 
+    public void EndMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
+       
+
     public void VictoryCondition()
     {
         if (ActualScore >= ScoreToWin)
@@ -49,6 +55,7 @@ public class GameManager : MonoBehaviour
             Object.FindObjectOfType<Ship>().gameObject.transform.position = new Vector3(0, 0, 0);
             SpawnAsteroid();
             ActualScore = 0;
+            EndMenu();
         }
     }
 
@@ -56,10 +63,12 @@ public class GameManager : MonoBehaviour
     {
         if (ActualShip.Life <= 0)
         {
+            
             for (int i = 0; i < Object.FindObjectsOfType<Asteroids>().Length; i++)
             {
                 Destroy(Object.FindObjectsOfType<Asteroids>()[i].gameObject);
             }
+                EndMenu();
         }
     }
 
