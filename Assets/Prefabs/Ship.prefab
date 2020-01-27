@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &578173484489005298
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 415948212962361242}
+  m_Layer: 0
+  m_Name: OffSet
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &415948212962361242
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 578173484489005298}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.24748743}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1130077704967304353}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1130077704061296336
 GameObject:
   m_ObjectHideFlags: 0
@@ -103,6 +133,7 @@ GameObject:
   - component: {fileID: 1130077704798215702}
   - component: {fileID: 1130077704798215703}
   - component: {fileID: 1130077704798215701}
+  - component: {fileID: -3695214361618040080}
   m_Layer: 0
   m_Name: Ship
   m_TagString: Untagged
@@ -138,11 +169,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rigibody: {fileID: 1130077704798215701}
-  rotationVelocity: 1800
-  acceleration: 6000
-  positionToSpawn: {fileID: 0}
+  rotationVelocity: 3600
+  acceleration: 5000
   shotReference: {fileID: 4392491329962148481, guid: 1bcb3f7ce79affa40b767632e4469664,
     type: 3}
+  Life: 3
+  gameManager: {fileID: 0}
+  cam: {fileID: 0}
+  GunOffset: {fileID: 0}
 --- !u!54 &1130077704798215701
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -159,6 +193,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 84
   m_CollisionDetection: 0
+--- !u!65 &-3695214361618040080
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1130077704798215704}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1130077704930582904
 GameObject:
   m_ObjectHideFlags: 0
@@ -280,6 +327,7 @@ Transform:
   m_Children:
   - {fileID: 1130077704061296367}
   - {fileID: 1130077704930582903}
+  - {fileID: 415948212962361242}
   m_Father: {fileID: 1130077704798215702}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

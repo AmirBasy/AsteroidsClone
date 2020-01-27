@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class Shot : MonoBehaviour
 {
-    public float velocity = 50;
-    public Vector3 direction = Vector3.forward;
-
+    public float velocity = 1000;
+    public Vector3 direction;
+    Rigidbody rb;
 
     private void Start()
     {
-
+        rb = this.gameObject.GetComponent<Rigidbody>();
     }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Limit")
@@ -22,15 +23,16 @@ public class Shot : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Limit")
-        {
-            Die();
-        }
+
+       Die();
+  
     }
 
     void Move()
     {
-        transform.Translate(direction * velocity * Time.deltaTime);
+
+        //transform.Translate(direction * velocity * Time.deltaTime);
+        rb.AddRelativeForce(direction * velocity * Time.deltaTime,ForceMode.Acceleration);
     }
 
     void SplitAsteroid()
@@ -52,5 +54,7 @@ public class Shot : MonoBehaviour
     void Update()
     {
         Move();
+       
     }
+
 }
