@@ -56,7 +56,10 @@ public class GameManager : MonoBehaviour
     {
         if (ActualShip.Life <= 0)
         {
-            
+            for (int i = 0; i < Object.FindObjectsOfType<Asteroids>().Length; i++)
+            {
+                Destroy(Object.FindObjectsOfType<Asteroids>()[i].gameObject);
+            }
         }
     }
 
