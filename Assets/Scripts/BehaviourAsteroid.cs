@@ -6,7 +6,7 @@ public class BehaviourAsteroid : MonoBehaviour
 {
     public Camera cam;
     public Rigidbody asteroid;
-    Asteroids ast;
+    public Asteroids ast;
     int border;
 
     void CrossScreen()
@@ -27,9 +27,9 @@ public class BehaviourAsteroid : MonoBehaviour
 
     }
 
-    void move()
+    void Move()
     {
-        border = ast.bordo;
+        
 
         if(border == 0)
         {
@@ -61,14 +61,15 @@ public class BehaviourAsteroid : MonoBehaviour
 
     void Start()
     {
-        ast = FindObjectOfType<Asteroids>();
-        cam = FindObjectOfType<Camera>();
+        //ast = FindObjectOfType<Asteroids>();
+        cam = Camera.main;// FindObjectOfType<Camera>();
+        border = ast.bordo;
     }
 
     void Update()
     {
         CrossScreen();
-        move();      
+        //Move();
     }
 
 }
