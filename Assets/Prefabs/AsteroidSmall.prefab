@@ -103,8 +103,8 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 130102}
   serializedVersion: 2
-  m_Mass: 200
-  m_Drag: 0.01
+  m_Mass: 50
+  m_Drag: 0
   m_AngularDrag: 0.5
   m_UseGravity: 0
   m_IsKinematic: 0
@@ -138,8 +138,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rbod: {fileID: 5428902}
-  velocity: 50
-  initialDirection: {x: -0.99206185, y: 0, z: 0.12575093}
+  velocity: 10000
+  initialDirection: {x: 0.3858698, y: 0, z: -0.92255324}
+  health: 2
 --- !u!1 &153142
 GameObject:
   m_ObjectHideFlags: 0

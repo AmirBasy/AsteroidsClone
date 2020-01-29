@@ -10,20 +10,10 @@ public class Asteroid : MonoBehaviour
     public Vector3 initialDirection;
     public int health = 1;
 
-    private void Awake()
+    void Start()
     {
         Gm = FindObjectOfType<GameManager>();
         rbod.AddForce(initialDirection * velocity);
-    }
-
-    void Start()
-    {
-
-    }
-
-    void Update()
-    {
-        
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -40,8 +30,8 @@ public class Asteroid : MonoBehaviour
 
     void Split()
     {
-        GameObject asteroid1 = Instantiate(Gm.Asteroids[0], transform.position, transform.localRotation);
-        GameObject asteroid2 = Instantiate(Gm.Asteroids[0], transform.position, transform.localRotation);
+        Instantiate(Gm.Asteroids[0], transform.position, transform.localRotation);
+        Instantiate(Gm.Asteroids[0], transform.position, transform.localRotation);
         Die();
     }
 

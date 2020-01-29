@@ -31,8 +31,7 @@ public class Ship : MonoBehaviour
 
     void Shot()
     {
-        Vector3 shotOffset = new Vector3(0, 0, 2);
-        GameObject newShot = Instantiate(shotReference, transform.position, transform.localRotation);
+        Instantiate(shotReference, transform.localPosition, transform.localRotation);
     }
 
     void Start()

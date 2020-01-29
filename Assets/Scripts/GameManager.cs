@@ -101,12 +101,12 @@ public class GameManager : MonoBehaviour
         }
         border = Random.Range(0, 4);
         Transform spawnPoint = Limit[border];
-        Vector3 spawnPosition = determineSpawnPosition(spawnPoint, asteroidScript);
-        newAsteroid = Instantiate(newAsteroid, spawnPosition, Quaternion.identity);
+        Vector3 spawnPosition = DetermineSpawnPosition(spawnPoint, asteroidScript);
+        Instantiate(newAsteroid, spawnPosition, Quaternion.identity);
     }
-    private Vector3 determineSpawnPosition(Transform spawnPoint, Asteroid script)
+    private Vector3 DetermineSpawnPosition(Transform spawnPoint, Asteroid script)
     {
-        Vector3 positionOffset = new Vector3(0, 0, 0), direction = new Vector3(0, 0, 0), directionOffset = new Vector3(0, 0, 0);
+        Vector3 positionOffset =  Vector3.zero , direction = Vector3.zero, directionOffset = Vector3.zero;
         float angle = Random.Range(minSpawnAngle, maxSpawnAngle);
         switch (border)
         {
