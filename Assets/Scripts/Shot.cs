@@ -4,25 +4,17 @@ using UnityEngine;
 
 public class Shot : MonoBehaviour
 {
-    public float velocity = 50;
+    public float velocity;
     public Vector3 direction = Vector3.forward;
-
 
     private void Start()
     {
 
     }
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.tag == "Limit")
-        {
-            Die();
-        }
-    }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Limit")
+        if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "Limit")
         {
             Die();
         }
@@ -33,22 +25,11 @@ public class Shot : MonoBehaviour
         transform.Translate(direction * velocity * Time.deltaTime);
     }
 
-    void SplitAsteroid()
-    {
-
-    }
-
-    void DestroyAsteroid()
-    {
-
-    }
-
     void Die()
     {
         Destroy(this.gameObject);
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
         Move();

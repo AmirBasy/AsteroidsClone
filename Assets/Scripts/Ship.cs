@@ -4,55 +4,68 @@ using UnityEngine;
 
 public class Ship : MonoBehaviour
 {
-    public Rigidbody rigibody;
-    public float rotationVelocity=45;
+    public Rigidbody rigbod;
+    public float rotationVelocity;
     public float acceleration;
     public GameObject shotReference;
-    public int Life;
+    public int life;
+    GameManager Gm;
 
     private void Awake()
     {
+        Gm = FindObjectOfType<GameManager>();
     }
     void Rotate(float direction)
     {
-        rigibody.AddTorque(transform.up * rotationVelocity * Time.deltaTime * direction);
-        //transform.Rotate(Vector3.up * rotationVelocity * Time.deltaTime * direction);
-    }
-
-    void Shot()
-    {
-        GameObject newShot = Instantiate(shotReference, transform.position, transform.localRotation);
+        rigbod.AddTorque(transform.up * rotationVelocity * Time.deltaTime * direction);
     }
 
     void Accelerate()
     {
-        rigibody.AddForce(transform.forward * acceleration * Time.deltaTime);
-        //transform.Translate(Vector3.forward * acceleration * Time.deltaTime);
+        rigbod.AddForce(transform.forward * acceleration * Time.deltaTime);
     }
-
-    void Die()
+    void Decelerate()
     {
-
+        rigbod.AddForce(transform.forward * acceleration * Time.deltaTime * -1);
     }
 
-    void CrossScreen()
+    void Shot()
     {
-
+        Vector3 shotOffset = new Vector3(0, 0, 2);
+        GameObject newShot = Instantiate(shotReference, transform.position, transform.localRotation);
     }
 
-
-    // Start is called before the first frame update
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.A)) Rotate(-1);
-        if (Input.GetKey(KeyCode.D)) Rotate(1);
-        if (Input.GetKey(KeyCode.W)) Accelerate();
-        if (Input.GetKeyDown(KeyCode.Space)) Shot();
+        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+        { Rotate(-1); }
+        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+        { Rotate(1); }
+        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
+        { Accelerate(); }
+        if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
+        { Decelerate(); }
+        if (Input.GetKeyDown(KeyCode.Space))
+        { Shot(); }
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Limit")
+        {
+            this.transform.position = Gm.Teleport(this.transform, collision.gameObject);
+        }
+        else if(collision.gameObject.tag == "Enemy")
+        {
+            //Die();
+        }
+    }
+    void Die()
+    {
+        Destroy(this.gameObject);
     }
 }
