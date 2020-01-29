@@ -54,10 +54,10 @@ public class GameManager : MonoBehaviour
 
     public void LoseCondition()
     {
-        if (ActualShip.life <= 1)
+        /*if (ActualShip.life <= 1)
         {
 
-        }
+        }*/
     }
     public void CheckPause()
     {

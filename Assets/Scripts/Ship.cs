@@ -5,33 +5,33 @@ using UnityEngine;
 public class Ship : MonoBehaviour
 {
     public Rigidbody rigbod;
-    public float rotationVelocity;
-    public float acceleration;
     public GameObject shotReference;
-    public int life;
     GameManager Gm;
+    public Transform turret;
+    public ShipData _data;
 
     private void Awake()
     {
         Gm = FindObjectOfType<GameManager>();
+        turret.localPosition = _data.turretPos;
     }
     void Rotate(float direction)
     {
-        rigbod.AddTorque(transform.up * rotationVelocity * Time.deltaTime * direction);
+        rigbod.AddTorque(transform.up * _data.rotationVelocity * Time.deltaTime * direction);
     }
 
     void Accelerate()
     {
-        rigbod.AddForce(transform.forward * acceleration * Time.deltaTime);
+        rigbod.AddForce(transform.forward * _data.acceleration * Time.deltaTime);
     }
     void Decelerate()
     {
-        rigbod.AddForce(transform.forward * acceleration * Time.deltaTime * -1);
+        rigbod.AddForce(transform.forward * _data.acceleration * Time.deltaTime * -1);
     }
 
     void Shot()
     {
-        Instantiate(shotReference, transform.localPosition, transform.localRotation);
+        Instantiate(shotReference, turret);
     }
 
     void Start()
