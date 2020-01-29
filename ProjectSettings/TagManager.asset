@@ -4,7 +4,9 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Limit
+  - Border
+  - Asteroid
+  - Bullet
   layers:
   - Default
   - TransparentFX
@@ -14,7 +16,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - PostProcessing
   - 
   - 
   - 
