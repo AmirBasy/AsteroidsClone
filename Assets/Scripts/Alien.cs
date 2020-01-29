@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Alien : MonoBehaviour
+public class Alien : MonoBehaviour 
 {
     public int scoreToGive = 1000;
     public float speed = 3;
@@ -110,5 +110,15 @@ public class Alien : MonoBehaviour
         gameManager.canSpawnAlien = true;
 
         Destroy(gameObject);
+    }
+
+    public void Accelerate()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void Rotate()
+    {
+        throw new System.NotImplementedException();
     }
 }

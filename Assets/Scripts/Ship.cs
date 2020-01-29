@@ -25,40 +25,66 @@ public class Ship : MonoBehaviour
         if (Input.GetKey(KeyCode.A)) Rotate(-1);
         if (Input.GetKey(KeyCode.D)) Rotate(1);
         if (Input.GetKey(KeyCode.W)) Accelerate();
-        if (Input.GetKeyDown(KeyCode.Space)) Shot();
+        if (Input.GetKeyDown(KeyCode.Space)) Shot(shotReference);
 
         CrossScreen();
     }
 
-    void Accelerate()
-    {
-        rb.AddForce(transform.forward * acceleration * Time.deltaTime);
-    }
-
+    #region private API
     void Rotate(float direction)
     {
         rb.AddTorque(transform.up * rotationVelocity * Time.deltaTime * direction);
     }
 
-    void Shot()
+    GameObject istantiateShot(GameObject _missile)
     {
         //spawn shot
-        GameObject newShot = Instantiate(shotReference);
-
-        //and set it
-        Vector3 position = transform.position + transform.forward;
-        Vector3 direction = transform.forward;
-        bool isPlayerShot = true;
-
-        newShot.GetComponent<Shot>().CreateShot(position, direction, isPlayerShot);
+        GameObject newShot = Instantiate(_missile);
+        return newShot;
     }
 
+    #region Shot API
+
+    Vector3 setDirection(GameObject _prefab)
+    {
+        Vector3 direction = _prefab.transform.forward;
+        return direction;
+    } 
+
+    Vector3 setPosition(GameObject _prefab)
+    {
+        Vector3 position = _prefab.transform.position + _prefab.transform.forward;
+        return position;
+    }
+
+    void Shot(GameObject _prefab)
+    {
+        GameObject _gameObject = istantiateShot(_prefab);
+        bool isPlayerShot = true;
+        _gameObject.GetComponent<Shot>().CreateShot(setPosition(this.gameObject), setDirection(this.gameObject), isPlayerShot);
+    } 
+    #endregion
+
+    // <summary>
+    /// if out of the screen, teleport to the other side
+    /// </summary>
     void CrossScreen()
     {
-        //if out of the screen, teleport to the other side
         transform.position = gameManager.CrossScreen(transform.position, 1, 0);
     }
 
+
+    public void Accelerate()
+    {
+        rb.AddForce(transform.forward * acceleration * Time.deltaTime);
+    }
+
+    public void Rotate()
+    {
+        throw new System.NotImplementedException();
+    }
+
+	#endregion    
     void OnTriggerEnter(Collider other)
     {
         //if hit shot
@@ -74,3 +100,4 @@ public class Ship : MonoBehaviour
         }
     }
 }
+
