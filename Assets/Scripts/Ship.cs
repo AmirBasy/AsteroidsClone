@@ -4,30 +4,28 @@ using UnityEngine;
 
 public class Ship : MonoBehaviour
 {
-    public Rigidbody rigibody;
-    public float rotationVelocity=45;
+    public float rotationSpeed;
     public float acceleration;
-    public GameObject shotReference;
-    public int Life;
-   
+    public GameObject shot;
+    public Rigidbody rigidBody;
+    public int life;
+    public GameObject manager;
+    public Manager managerClass;
 
-    private void Awake()
+    void Rotate(int verso)
     {
-    }
-    void Rotate(float direction)                                       //Ship rotation
-    {
-        rigibody.AddTorque(transform.up * rotationVelocity * Time.deltaTime * direction);
-        //transform.Rotate(Vector3.up * rotationVelocity * Time.deltaTime * direction);
-    }
-
-    void Shot()                                                        //projectiles
-    {
-        GameObject newShot = Instantiate(shotReference, transform.position, transform.localRotation);
+        rigidBody.AddTorque(Vector3.up * verso * rotationSpeed * Time.deltaTime);
+        //transform.Rotate(Vector3.up * verso * rotationSpeed * Time.deltaTime);
     }
 
-    void Accelerate()                                                  //RigidBody movement speed
+    void Shot()
     {
-        rigibody.AddForce(transform.forward * acceleration * Time.deltaTime);
+        Instantiate(shot, transform.position + transform.forward * 0.5f, transform.rotation);
+    }
+
+    void Accelerate()
+    {
+        rigidBody.AddForce(transform.forward * acceleration * Time.deltaTime);
         //transform.Translate(Vector3.forward * acceleration * Time.deltaTime);
     }
 
@@ -36,38 +34,6 @@ public class Ship : MonoBehaviour
 
     }
 
-    void CrossScreen()
-    {
-        Camera cam = FindObjectOfType<Camera>();
-        Vector3 screenPoint = cam.WorldToViewportPoint(transform.position);
-
-        if (screenPoint.x > 1)
-        {
-            transform.position = cam.ViewportToWorldPoint(new Vector3(0, screenPoint.y, screenPoint.z));
-        }
-        else if (screenPoint.x < 0)
-        {
-            transform.position = cam.ViewportToWorldPoint(new Vector3(1, screenPoint.y, screenPoint.z));
-        }
-        else if (screenPoint.y > 1)
-        {
-            transform.position = cam.ViewportToWorldPoint(new Vector3(screenPoint.x, 0, screenPoint.z));
-        }
-        else if (screenPoint.y < 0)
-        {
-            transform.position = cam.ViewportToWorldPoint(new Vector3(screenPoint.x, 1, screenPoint.z));
-        }
-    }
-
-    private void onTriggerEnter(Collider collider)                      //Ship + Asteroid collision
-    {
-        if (collider.gameObject.tag == "Asteroid")
-        {
-            
-        }
-    }
-
-
     // Start is called before the first frame update
     void Start()
     {
@@ -75,11 +41,21 @@ public class Ship : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()                                                       //Ship keybindings
+    void Update()
     {
-        if (Input.GetKey(KeyCode.A)) Rotate(-1);
         if (Input.GetKey(KeyCode.D)) Rotate(1);
+        if (Input.GetKey(KeyCode.A)) Rotate(-1);
         if (Input.GetKey(KeyCode.W)) Accelerate();
         if (Input.GetKeyDown(KeyCode.Space)) Shot();
+    }
+    private void OnTriggerEnter(Collider collision)    {
+        if (collision.gameObject.name == "collisionTop") transform.position += new Vector3(0, 0, -18);
+        if (collision.gameObject.name == "collisionBottom") transform.position += new Vector3(0, 0, 18);
+        if (collision.gameObject.name == "collisionLeft") transform.position += new Vector3(34, 0, 0);
+        if (collision.gameObject.name == "collisionRight") transform.position += new Vector3(-34, 0, 0);
+        if (collision.gameObject.tag == "Asteroid" && managerClass.shipCollider == true)
+        {
+            managerClass.alive=false;
+        }
     }
 }
