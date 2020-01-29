@@ -5,6 +5,16 @@ TagManager:
   serializedVersion: 2
   tags:
   - Limit
+  - Asteroid
+  - Shot
+  - Health
+  - AsteroidS
+  - AsteroidM
+  - AsteroidL
+  - LimitUp
+  - LimitDown
+  - LimitDx
+  - LimitSx
   layers:
   - Default
   - TransparentFX
