@@ -45,7 +45,7 @@ public class Asteroid : MonoBehaviour
 
         time = 0;
 
-        if (transform.position.z >  17) { RotationFromU(); }
+        if (transform.position.z >  17) { RotationFromU(); }            //TODO da fixare a casa. userò i colliders degli Aspawner
         if (transform.position.z < -16) { RotationFromD(); }
         if (transform.position.x >  31) { RotationFromR(); }
         if (transform.position.x < -30) { RotationFromL(); }

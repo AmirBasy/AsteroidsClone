@@ -22,14 +22,14 @@ public class Buttons : MonoBehaviour
         P2.depth = -1;
     }
 
-    public void GoToP1() //godocP1 button pressed
+    public void GoToP1() //gotodocP1 button pressed
     {
         Main.depth = 0;
         P1.depth = 1;
         P2.depth = -1;
     }
 
-    public void GoToP2() //godocP2 button pressed
+    public void GoToP2() //goyodocP2 button pressed
     {
         Main.depth = -1;
         P1.depth = 0;
@@ -62,7 +62,7 @@ public class Buttons : MonoBehaviour
             onOff.GetComponent<Text>().text = "ON";
         }
     }
-    public void Update()
+    public void Start()
     {
         music = FindObjectOfType<AudioManager>();
     }

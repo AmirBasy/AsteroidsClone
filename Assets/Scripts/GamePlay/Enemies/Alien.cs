@@ -27,7 +27,7 @@ public class Alien : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ship = FindObjectOfType<Ship>();
+       
         time = time + Time.deltaTime;
 
         if (transform.position.y == 0 & time < 3)
@@ -47,5 +47,10 @@ public class Alien : MonoBehaviour
         { Destroy(this.gameObject); }
         
         if (other.tag == "Bullet") { gameManager.score += 350; Destroy(this.gameObject); gameManager.aliens += 1; }
+    }
+
+    private void FixedUpdate()
+    {
+        ship = FindObjectOfType<Ship>();
     }
 }

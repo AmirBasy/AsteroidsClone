@@ -11,7 +11,7 @@ public class AsUp : MonoBehaviour
   
     void SpawningFromU()
     {
-        Instantiate(asteriod, new Vector3(Random.Range(-15f, 15f), 0, 18f), Quaternion.identity);
+        Instantiate(asteriod, new Vector3(Random.Range(-15f, 15f), 0, 18f), Quaternion.identity); //TODO, da fixare lo spawn dell'asteroide(in tutti i 4 Aspwner)
     }
 
     // Start is called before the first frame update
