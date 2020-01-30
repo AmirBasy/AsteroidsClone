@@ -8,48 +8,48 @@ public class Shot : MonoBehaviour
     public Vector3 direction = Vector3.forward;
     public bool playerShot = true;
 
-    GameManager gameManager;
 
-    void Awake()
+    protected virtual void Update()
     {
-        gameManager = FindObjectOfType<GameManager>();
+        Move(transform);
     }
 
-
-    void Update()
+    protected virtual void OnTriggerEnter(Collider other)
     {
-        Move();
-
-        OutScreen();
+        //if reached limit destroy shot
+        if (other.gameObject.CompareTag("Limit"))
+            Die();
     }
 
-    public void CreateShot(Vector3 position, Vector3 newDirection, bool isPlayerShot)
+    #region protected API
+
+    protected virtual void Move(Transform tr)
+    {
+        tr.Translate(direction * speed * Time.deltaTime);
+    }
+
+    protected virtual void Die()
+    {
+        Destroy(this.gameObject);
+    }
+
+    #endregion
+
+    #region public API
+
+    public virtual void CreateShot(Vector3 position, Vector3 newDirection, bool isPlayerShot)
     {
         transform.position = position;
         direction = newDirection;
         playerShot = isPlayerShot;
-
+        
         //if is not a player shot, change color
         if(!playerShot)
+        { 
             GetComponentInChildren<Renderer>().material.color = Color.yellow;
+            speed /= 3;
+        }
     }
 
-    void Move()
-    {
-        transform.Translate(direction * speed * Time.deltaTime);
-    }
-
-    void OutScreen()
-    {
-        //if out screen, destroy gameObject
-        bool outScreen = gameManager.OutScreen(transform.position, 1.5f, -0.5f);
-
-        if (outScreen)
-            Die();
-    }
-
-    void Die()
-    {
-        Destroy(this.gameObject);
-    }
+    #endregion
 }

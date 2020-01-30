@@ -262,10 +262,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreToGive: 1000
+  speed: 3
+  rateOfFire: 5
   shotReference: {fileID: 4392491329962148481, guid: 1bcb3f7ce79affa40b767632e4469664,
     type: 3}
-  speed: 3
-  RateOfFire: 1
 --- !u!54 &-6962964448785101889
 Rigidbody:
   m_ObjectHideFlags: 0

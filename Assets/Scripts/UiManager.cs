@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIManager : MonoBehaviour
+public class UiManager : MonoBehaviour
 {
     public GameObject lifePrefab0, lifePrefab1, lifePrefab2;
     public Text score;

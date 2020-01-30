@@ -101,8 +101,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1130077704798215702}
-  - component: {fileID: 1130077704798215703}
   - component: {fileID: 1130077704798215701}
+  - component: {fileID: -3362297172708147180}
   m_Layer: 0
   m_Name: Ship
   m_TagString: Player
@@ -125,25 +125,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1130077704798215703
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1130077704798215704}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8b2ccd763e815a48adc80d56f8cf51c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Life: 3
-  acceleration: 6000
-  rotationVelocity: 1800
-  invincible: 0
-  rb: {fileID: 1130077704798215701}
-  shotReference: {fileID: 4392491329962148481, guid: 1bcb3f7ce79affa40b767632e4469664,
-    type: 3}
 --- !u!54 &1130077704798215701
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -160,6 +141,24 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 84
   m_CollisionDetection: 0
+--- !u!114 &-3362297172708147180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1130077704798215704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2f3ed3a695eb4d49bff962f124a244c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  life: 3
+  acceleration: 6000
+  rotationVelocity: 1800
+  invincible: 0
+  shotReference: {fileID: 4392491329962148481, guid: 1bcb3f7ce79affa40b767632e4469664,
+    type: 3}
 --- !u!1 &1130077704930582904
 GameObject:
   m_ObjectHideFlags: 0

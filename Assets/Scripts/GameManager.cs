@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
 
     bool calledSpawnAsteroids = false;
 
-    UIManager uiManager;
+    UiManager uiManager;
     Camera cam;
 
     void Awake()
@@ -31,10 +31,11 @@ public class GameManager : MonoBehaviour
         SceneManager.sceneUnloaded += SceneUnloaded;
 
         actualShip = FindObjectOfType<Ship>();
-
-        uiManager = FindObjectOfType<UIManager>();
-
+        uiManager = FindObjectOfType<UiManager>();
         cam = FindObjectOfType<Camera>();
+
+        //create limits
+        CreateLimits();
     }
 
     private void Update()
@@ -81,6 +82,8 @@ public class GameManager : MonoBehaviour
         Destroy(gameObject);
     }
 
+    #region scene Control
+
     public void GoToMenu()
     {
         Time.timeScale = 1; //if called from pause menù
@@ -111,6 +114,8 @@ public class GameManager : MonoBehaviour
 #endif
     }
 
+    #region pause menu
+
     void PauseGame()
     {
         //ferma il tempo e fa apparire il menù di pausa
@@ -124,6 +129,14 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
         uiManager.PauseMenu(false);
     }
+
+    #endregion
+
+    #endregion
+
+    #region update checks
+
+    #region spawn
 
     void CheckSpawnAsteroids()
     {
@@ -142,6 +155,10 @@ public class GameManager : MonoBehaviour
             StartCoroutine(SpawnAlien());
         }
     }
+
+    #endregion
+
+    #region conditions endgame
 
     void VictoryCondition()
     {
@@ -163,6 +180,56 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #endregion
+
+    #region private API
+
+    #region limits
+
+    void CreateLimits()
+    {
+        float depthScreen = cam.WorldToViewportPoint(actualShip.transform.position).z;
+        Vector3 size = GetScale(depthScreen);
+
+        float movementX = size.x / 2;
+        float movementZ = size.z / 2;
+
+        CreateWall(new Vector3(1, 0.5f, depthScreen), size, new Vector3(movementX, 0, 0));      //right
+        CreateWall(new Vector3(0, 0.5f, depthScreen), size, new Vector3(-movementX, 0, 0));     //left
+        CreateWall(new Vector3(0.5f, 1, depthScreen), size, new Vector3(0, 0, movementZ));     //up
+        CreateWall(new Vector3(0.5f, 0, depthScreen), size, new Vector3(0, 0, -movementZ));    //down
+    }
+
+    Vector3 GetScale(float depth)
+    {
+        //get size for the wall from the screen width and height
+        Vector3 left = cam.ViewportToWorldPoint(new Vector3(0, 0, depth));
+        Vector3 right = cam.ViewportToWorldPoint(new Vector3(1, 2, depth));
+
+        Vector3 size = right - left;
+
+        return new Vector3(size.x, 1, size.z);
+    }
+
+    void CreateWall(Vector3 viewportPoint, Vector3 size, Vector3 movement)
+    {
+        //instantiate, move and set size
+        GameObject wall = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        wall.transform.position = cam.ViewportToWorldPoint(viewportPoint);
+        wall.transform.localScale = size;
+        wall.transform.position += movement;
+
+        //set trigger and tag
+        wall.GetComponent<BoxCollider>().isTrigger = true;
+        wall.tag = "Limit";
+    }
+
+    #endregion
+
+    #region spawn
+
     IEnumerator SpawnAsteroids()
     {
         calledSpawnAsteroids = true;
@@ -171,11 +238,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(1);
 
         //spawn asteroids
-        for (int i = 0; i < numberAsteroids; i++)
-        {
-            GameObject go = Instantiate(asteroidReference);
-            go.GetComponent<Asteroid>().CreateAsteroid();
-        }
+        SpawnObject(asteroidReference, numberAsteroids);
 
         calledSpawnAsteroids = false;
     }
@@ -188,17 +251,27 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(Random.Range(minTimeAlien, maxTimeAlien));
 
         //spawn alien
-        GameObject go = Instantiate(alienReference);
-        go.GetComponent<Alien>().CreateAlien();
+        SpawnObject(alienReference, 1);
     }
+
+    void SpawnObject(GameObject prefab, int numberOfObjects)
+    {
+        //instantiate and set
+        for(int i = 0; i < numberOfObjects; i++)
+        {
+            GameObject go = Instantiate(prefab);
+            go.GetComponent<ICreation>().Create();
+        }
+    }
+
+    #endregion
+
+    #region respawn ship
 
     IEnumerator RespawnShip()
     {
         //disable ship and rigidbody
-        actualShip.enabled = false;
-        Rigidbody shipRb = actualShip.GetComponent<Rigidbody>();
-        shipRb.velocity = Vector3.zero;
-        shipRb.angularVelocity = Vector3.zero;
+        Disable(actualShip);
 
         //wait
         yield return new WaitForSeconds(0.5f);
@@ -207,25 +280,62 @@ public class GameManager : MonoBehaviour
         Transform shipTr = actualShip.transform;
         while (shipTr.transform.localScale.x > 0.1f)
         {
-            shipTr.Rotate(Vector3.up * 360 * Time.deltaTime);
-            shipTr.localScale -= new Vector3(0.01f, 0.01f, 0.01f);
+            Animation(shipTr);
 
             yield return null;
         }
 
         //reset animation
-        shipTr.rotation = Quaternion.identity;
-        shipTr.localScale = Vector3.one;
+        ResetAnimation(shipTr);
 
         //and respawn - invincible
-        actualShip.transform.position = Vector3.zero;
-        actualShip.invincible = true;
-        actualShip.enabled = true;
+        SetInvincible(true);
+        Respawn(actualShip, Vector3.zero);
 
         //remove invincible after few seconds
         yield return new WaitForSeconds(2);
-        actualShip.invincible = false;
+        SetInvincible(false);
     }
+
+    void Disable(MonoBehaviour script)
+    {
+        //disable script and stop rigidbody
+        script.enabled = false;
+
+        Rigidbody scriptRB = script.GetComponent<Rigidbody>();
+        scriptRB.velocity = Vector3.zero;
+        scriptRB.angularVelocity = Vector3.zero;
+    }
+
+    void Animation(Transform tr)
+    {
+        //animation - rotate and minimize
+        tr.Rotate(Vector3.up * 360 * Time.deltaTime);
+        tr.localScale -= new Vector3(0.01f, 0.01f, 0.01f);
+    }
+
+    void ResetAnimation(Transform tr)
+    {
+        tr.rotation = Quaternion.identity;
+        tr.localScale = Vector3.one;
+    }
+
+    void Respawn(MonoBehaviour script, Vector3 position)
+    {
+        script.transform.position = position;
+        script.enabled = true;
+    }
+
+    void SetInvincible(bool invincible)
+    {
+        actualShip.invincible = invincible;
+    }
+
+    #endregion
+
+    #endregion
+
+    #region public API
 
     public void AddScore(int score)
     {
@@ -247,6 +357,8 @@ public class GameManager : MonoBehaviour
             StartCoroutine(RespawnShip());
         }
     }
+
+    #region utility
 
     public Vector3 CrossScreen(Vector3 position, float max, float min)
     {
@@ -276,21 +388,6 @@ public class GameManager : MonoBehaviour
         return newPosition;
     }
 
-    public bool OutScreen(Vector3 position, float max, float min)
-    {
-        //from world point to viewport point
-        Vector3 screenPoint = cam.WorldToViewportPoint(position);
-
-        //if out of the screen, return true
-        if (screenPoint.x > max || screenPoint.x < min || screenPoint.y > max || screenPoint.y < min)
-        {
-            return true;
-        }
-
-        //else return false
-        return false;
-    }
-
     public Vector3 RandomPosition()
     {
         //return random position outside of the screen
@@ -304,22 +401,21 @@ public class GameManager : MonoBehaviour
         {
             //up, random x
             screenPosition.x = Random.Range(0f, 1f);
-            screenPosition.y = 1.5f;
+            screenPosition.y = 1.1f;
         }
         else if (y == -1)
         {
             //down, random x
             screenPosition.x = Random.Range(0f, 1f);
-            screenPosition.y = -1.5f;
+            screenPosition.y = -1.1f;
         }
         else
         {
+            //0 == left, 1 == right
+            screenPosition.x = Random.Range(0, 2) == 0 ? -1.1f : 1.1f;
+
             //random y
             screenPosition.y = Random.Range(0f, 1f);
-
-            //0 == left, 1 == right
-            screenPosition.x = Random.Range(0, 2) == 0 ? -1.5f : 1.5f;
-
         }
 
         //return to world point and set y to 0
@@ -328,4 +424,9 @@ public class GameManager : MonoBehaviour
 
         return worldPosition;
     }
+
+    #endregion
+
+    #endregion
+
 }
