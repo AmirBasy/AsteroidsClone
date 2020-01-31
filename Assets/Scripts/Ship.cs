@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class Ship : MonoBehaviour
 {
+    GameManager GM;
     public Rigidbody rigbod;
     public GameObject shotReference;
-    GameManager Gm;
     public Transform turret;
     public ShipData _data;
 
     private void Awake()
     {
-        Gm = FindObjectOfType<GameManager>();
+        GM = FindObjectOfType<GameManager>();
         turret.localPosition = _data.turretPos;
     }
     void Rotate(float direction)
@@ -56,7 +56,7 @@ public class Ship : MonoBehaviour
     {
         if (collision.gameObject.tag == "Limit")
         {
-            this.transform.position = Gm.Teleport(this.transform, collision.gameObject);
+            this.transform.position = GM.Teleport(this.transform, collision.gameObject);
         }
         else if(collision.gameObject.tag == "Enemy")
         {

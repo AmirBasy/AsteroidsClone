@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2856942f5a72f7d49aaec4991839b664, type: 3}
-  m_Name: default
+  m_Name: ShipDefault
   m_EditorClassIdentifier: 
-  rotationVelocity: 0.75
+  rotationVelocity: 3000
   acceleration: 10000
-  life: 129
-  turretPos: {x: 2.7, y: 1.83, z: 1.89}
+  life: 5
+  turretPos: {x: 0, y: 0, z: 0.1}

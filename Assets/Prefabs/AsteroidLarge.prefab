@@ -293,10 +293,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a004af13774948e46ad632f684735fc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rbod: {fileID: 5444550}
+  rigbod: {fileID: 5444550}
   velocity: 10000
-  initialDirection: {x: 0.35797188, y: 0, z: 0.9337324}
+  initialDirection: {x: 0.03378274, y: 0, z: -0.99942917}
   health: 1
+  points: 20
 --- !u!1 &176588
 GameObject:
   m_ObjectHideFlags: 0
