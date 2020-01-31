@@ -7,7 +7,12 @@ public class Ship : MonoBehaviour
     GameManager GM;
     public Rigidbody rigbod;
     public GameObject shotReference;
+    /*
+    Empty object used as a reference for the spawning of the shots,
+    Allowing to move the turret, in case of different types of ship
+    */
     public Transform turret;
+    //Class that contains all the basic information needed by every ship
     public ShipData _data;
 
     private void Awake()
@@ -15,6 +20,9 @@ public class Ship : MonoBehaviour
         GM = FindObjectOfType<GameManager>();
         turret.localPosition = _data.turretPos;
     }
+
+    #region Movement
+    //Movement-related functions
     void Rotate(float direction)
     {
         rigbod.AddTorque(transform.up * _data.rotationVelocity * Time.deltaTime * direction);
@@ -28,17 +36,15 @@ public class Ship : MonoBehaviour
     {
         rigbod.AddForce(transform.forward * _data.acceleration * Time.deltaTime * -1);
     }
+    #endregion
 
+    //Creates a new Shot-type object, at the turret's position
     void Shot()
     {
         Instantiate(shotReference, turret);
     }
 
-    void Start()
-    {
-        
-    }
-
+    //Checks the input for the ship's movement and action
     void Update()
     {
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
@@ -52,6 +58,8 @@ public class Ship : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         { Shot(); }
     }
+
+    //Collision control and management
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Limit")
@@ -63,6 +71,7 @@ public class Ship : MonoBehaviour
             //Die();
         }
     }
+
     void Die()
     {
         Destroy(this.gameObject);
