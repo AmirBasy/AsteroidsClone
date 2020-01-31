@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-
 public class Gamemanager : MonoBehaviour
 {
     public int aliens;
@@ -17,8 +16,6 @@ public class Gamemanager : MonoBehaviour
     bool startGameplay;
     public bool pause;
     public AudioManager music;
-
-   
 
     public static Gamemanager instance;
     // Start is called before the first frame update
@@ -69,8 +66,6 @@ public class Gamemanager : MonoBehaviour
 
         if (stoptime == false) { time = time + Time.deltaTime; }
 
-      
-
         if (Input.GetKeyDown(KeyCode.P))
         {
             SetPause(); 
@@ -85,8 +80,6 @@ public class Gamemanager : MonoBehaviour
             Time.timeScale = 0;
             pause = true;
             music.GetComponent<AudioSource>().mute = true;
-            
-
         }
         else
         {
