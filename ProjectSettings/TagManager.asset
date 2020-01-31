@@ -5,6 +5,11 @@ TagManager:
   serializedVersion: 2
   tags:
   - Limit
+  - Alien
+  - Asteroid
+  - ShipT
+  - Bullet
+  - pauseCam
   layers:
   - Default
   - TransparentFX
