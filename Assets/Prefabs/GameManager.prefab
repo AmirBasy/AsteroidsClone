@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1294478147247726812}
   - component: {fileID: 1294478147247726813}
+  - component: {fileID: 1795884565}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -43,14 +44,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f157b4306374df479143fc191767c5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ActualScore: 0
-  ScoreToWin: 10000
+  actualScore: 0
+  scoreToWin: 10000
   asteroidReference: {fileID: 647470260775687973, guid: f2b06d20f76c83c4b89a041ae673531a,
     type: 3}
+  numberAsteroids: 10
   alienReference: {fileID: 6213702057058180598, guid: a86e3d876eb02734e998d3375ff5450d,
     type: 3}
   minTimeAlien: 10
   maxTimeAlien: 30
-  ActualShip: {fileID: 0}
+  actualShip: {fileID: 0}
   asteroids: []
   canSpawnAlien: 1
+--- !u!114 &1795884565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1294478147247726815}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7fc57376daab404296dab8b9a69764c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameMusic: {fileID: 8300000, guid: db481f465357d3b47a1de10f663997a9, type: 3}
+  alienInScene: {fileID: 8300000, guid: 74d159fba530aea44adb51237bc61b10, type: 3}

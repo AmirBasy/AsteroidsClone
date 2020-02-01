@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface ICreation
 {
-    void Create();
+    void Create(Vector3 position, Vector3 size, Vector3 direction, float speed, System.Action<AudioClip> soundFunction);
 }

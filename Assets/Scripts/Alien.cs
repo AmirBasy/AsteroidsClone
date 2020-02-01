@@ -9,6 +9,11 @@ public class Alien : MonoBehaviour, ICreation
     public float rateOfFire = 5;
     public GameObject shotReference;
 
+    public AudioClip sound_alienShot;
+    public AudioClip sound_alienDestroy;
+
+    [HideInInspector] public System.Action<AudioClip> OnSound;
+
     protected Vector3 direction;
     protected float timerShot;
 
@@ -16,7 +21,7 @@ public class Alien : MonoBehaviour, ICreation
 
     protected virtual void Awake()
     {
-        gameManager = FindObjectOfType<GameManager>();
+        gameManager = GameManager.instance;
     }
 
     protected virtual void Update()
@@ -92,6 +97,9 @@ public class Alien : MonoBehaviour, ICreation
         bool isPlayerShot = false;
 
         newShot.GetComponent<Shot>().CreateShot(GetDownPosition(this.transform), GetPlayerDirection(this.transform), isPlayerShot);
+
+        //sound
+        OnSound(sound_alienShot);
     }
 
     protected virtual GameObject IstantiateShot(GameObject prefab)
@@ -122,26 +130,25 @@ public class Alien : MonoBehaviour, ICreation
     protected virtual void Die()
     {
         //reset in gameManager
-        gameManager.canSpawnAlien = true;
+        gameManager.DestroyAlien();
 
         Destroy(gameObject);
+
+        //sound
+        OnSound(sound_alienDestroy);
     }
 
     #endregion
 
     #region public API
 
-    public virtual void Create()
+    public virtual void Create(Vector3 position, Vector3 size, Vector3 direction, float speed, System.Action<AudioClip> soundFunction)
     {
-        //set position outside of the screen
-        transform.position = gameManager.RandomPosition();
-
-        //set size of the alien
-        float size = Random.Range(1f, 1.5f);
-        transform.localScale = new Vector3(size, size, size);
-
-        //set random direction
-        direction = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)).normalized;
+        transform.position = position;
+        transform.localScale = size;
+        this.direction = direction;
+        this.speed = speed;
+        OnSound = soundFunction;
     }
 
     #endregion

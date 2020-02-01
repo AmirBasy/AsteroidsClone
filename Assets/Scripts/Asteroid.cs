@@ -7,11 +7,16 @@ public class Asteroid : MonoBehaviour, ICreation
     public int scoreToGive = 10;
     public int scoreDestroyed = 100;
 
+    public AudioClip sound_asteroidSplit;
+    public AudioClip sound_asteroidDestroy;
+
+    [HideInInspector] public System.Action<AudioClip> OnSound;
+
     protected GameManager gameManager;
 
     protected virtual void Awake()
     {
-        gameManager = FindObjectOfType<GameManager>();
+        gameManager = GameManager.instance;
     }
 
     protected virtual void OnTriggerStay(Collider other)
@@ -52,12 +57,18 @@ public class Asteroid : MonoBehaviour, ICreation
 
                 Vector3 shotDirection = shot.direction;
                 SplitAsteroid(shotDirection);
+
+                //sound
+                OnSound(sound_asteroidSplit);
             }
             else
             {
                 gameManager.AddScore(scoreDestroyed);
 
                 Die();
+
+                //sound
+                OnSound(sound_asteroidDestroy);
             }
 
             //destroy shot
@@ -68,8 +79,10 @@ public class Asteroid : MonoBehaviour, ICreation
     protected virtual void CrossScreen(Transform tr)
     {
         //if out of the screen, teleport to the other side
-        tr.position = gameManager.CrossScreen(tr.position, 1.05f, -0.05f);
+        tr.position = gameManager.CrossScreen(tr.position, 1, 0);
     }
+
+    #region split
 
     protected virtual void SplitAsteroid(Vector3 shotDirection)
     {
@@ -86,26 +99,40 @@ public class Asteroid : MonoBehaviour, ICreation
         Die();
     }
 
-    protected virtual void CreateHalfAsteroid(Vector3 position)
+    protected virtual void CreateHalfAsteroid(Vector3 pos)
     {
-        //create half asteroids
+        //create half asteroid
         GameObject halfAsteroid = Instantiate(gameObject);
 
-        //add asteroid to the list
-        gameManager.asteroids.Add(halfAsteroid);
+        Vector3 position = GetPositionHalfAst(pos);
+        Vector3 size = GetSizeHalfAst();
+        Vector3 direction = GetDirectionHalfAst(pos);
+        float speed = GetSpeedHalfAst();
 
-        //set positions
-        halfAsteroid.transform.position = transform.position + position;
-
-        //set scales
-        halfAsteroid.transform.localScale = transform.localScale / 2;
-
-        //add force to rigidbody
-        Vector3 direction = position;
-        float force = Random.Range(300, 500);
-        Rigidbody rb = halfAsteroid.GetComponent<Rigidbody>();
-        rb.AddForce(direction * force);
+        halfAsteroid.GetComponent<ICreation>().Create(position, size, direction, speed, OnSound);
     }
+
+    protected virtual Vector3 GetPositionHalfAst(Vector3 pos)
+    {
+        return transform.position + pos;
+    }
+
+    protected virtual Vector3 GetSizeHalfAst()
+    {
+        return transform.localScale / 2;
+    }
+
+    protected virtual Vector3 GetDirectionHalfAst(Vector3 pos)
+    {
+        return pos;
+    }
+
+    protected virtual float GetSpeedHalfAst()
+    {
+        return Random.Range(300, 500);
+    }
+
+    #endregion
 
     protected virtual void Die()
     {
@@ -119,23 +146,18 @@ public class Asteroid : MonoBehaviour, ICreation
 
     #region public API
 
-    public virtual void Create()
+    public virtual void Create(Vector3 position, Vector3 size, Vector3 direction, float speed, System.Action<AudioClip> soundFunction)
     {
         //add asteroid to the list
         gameManager.asteroids.Add(this.gameObject);
 
-        //set position outside of the screen
-        transform.position = gameManager.RandomPosition();
-
-        //set size of the asteroid
-        float size = 5;
-        transform.localScale = new Vector3(size, size, size);
+        transform.position = position;
+        transform.localScale = size;
+        OnSound = soundFunction;
 
         //add force to rigidbody in random direction
-        Vector3 direction = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)).normalized;
-        float force = Random.Range(250, 300);
         Rigidbody rb = GetComponent<Rigidbody>();
-        rb.AddForce(direction * force);
+        rb.AddForce(direction * speed);
     }
 
     #endregion

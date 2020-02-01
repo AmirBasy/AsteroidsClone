@@ -16,9 +16,10 @@ public class UiManager : MonoBehaviour
 
     void Start()
     {
-        gameManager = FindObjectOfType<GameManager>();
+        gameManager = GameManager.instance;
 
-        SetCurrentShipLife();
+        if(gameManager != null)
+            SetCurrentShipLife();
     }
 
     public void SetCurrentShipLife()

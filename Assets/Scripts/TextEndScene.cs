@@ -9,7 +9,7 @@ public class TextEndScene : MonoBehaviour
     void Start()
     {
         //if there is gameManager (so after gameplay)
-        GameManager gameManager = FindObjectOfType<GameManager>();
+        GameManager gameManager = GameManager.instance;
         if (gameManager != null)
         {
             Text textScores = GetComponent<Text>();

@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager instance;
+
     public int actualScore = 0;
     public int scoreToWin = 10000;
     public GameObject asteroidReference;
@@ -15,27 +17,17 @@ public class GameManager : MonoBehaviour
 
     [HideInInspector] public Ship actualShip;
     [HideInInspector] public List<GameObject> asteroids = new List<GameObject>();
-    [HideInInspector] public bool canSpawnAlien = true;
+    [HideInInspector] public bool canSpawnAlien;
 
-    bool calledSpawnAsteroids = false;
+    bool calledSpawnAsteroids;
 
+    AudioManager audioManager;
     UiManager uiManager;
     Camera cam;
 
     void Awake()
     {
-        //don't destroy, so we can see scores in end scene
-        DontDestroyOnLoad(gameObject);
-
-        //check for scene unloaded, so we can destroy when come back to gameplay
-        SceneManager.sceneUnloaded += SceneUnloaded;
-
-        actualShip = FindObjectOfType<Ship>();
-        uiManager = FindObjectOfType<UiManager>();
-        cam = FindObjectOfType<Camera>();
-
-        //create limits
-        CreateLimits();
+        CheckGameManager();
     }
 
     private void Update()
@@ -63,45 +55,70 @@ public class GameManager : MonoBehaviour
         LoseCondition();
     }
 
-    private void SceneUnloaded(Scene scene)
+    void CheckGameManager()
     {
-        //die when come back to gameplay from end scene
-        if (scene.name != "Gameplay")
-            Die();
+        if(instance != null)
+        {
+            //if there is already a gameManager, set his defaults and destroy this one
+            instance.SetDefaults();
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            //if this is the unique gameManager, set default values
+            instance = this;
+
+            SetDefaults();
+        }
     }
 
-    void Die()
+    void SetDefaults()
     {
-        //disable so nobody find this gameManager with findObjectOfType
-        gameObject.SetActive(false);
+        //don't destroy, so we can see scores in end scene
+        DontDestroyOnLoad(gameObject);
 
-        //stop check for scene change
-        SceneManager.sceneUnloaded -= SceneUnloaded;
+        audioManager = GetComponent<AudioManager>();
 
-        //than destroy
-        Destroy(gameObject);
+        actualShip = FindObjectOfType<Ship>();
+        uiManager = FindObjectOfType<UiManager>();
+        cam = Camera.main;
+
+        asteroids.Clear();
+        canSpawnAlien = true;
+        calledSpawnAsteroids = false;
+
+        //create limits
+        CreateLimits();
     }
 
     #region scene Control
 
     public void GoToMenu()
     {
+        StopAllCoroutines();
         Time.timeScale = 1; //if called from pause menù
+        instance.audioManager.ChangeGameMusic(false);
         SceneManager.LoadScene("MainMenu");
     }
 
     public void GoToGameplay()
     {
+        StopAllCoroutines();
+        instance.audioManager.ChangeGameMusic(false);
         SceneManager.LoadScene("Gameplay");
     }
 
     public void Win()
     {
+        StopAllCoroutines();
+        instance.audioManager.ChangeGameMusic(false);
         SceneManager.LoadScene("WinScene");
     }
 
     public void Lose()
     {
+        StopAllCoroutines();
+        instance.audioManager.ChangeGameMusic(false);
         SceneManager.LoadScene("LoseScene");
     }
 
@@ -190,14 +207,18 @@ public class GameManager : MonoBehaviour
 
     void CreateLimits()
     {
+        //don't create limits, when there isn't the ship (you are not in gameplay scene)
+        if (actualShip == null) return;
+
+        //get size of the walls
         float depthScreen = cam.WorldToViewportPoint(actualShip.transform.position).z;
         Vector3 size = GetScale(depthScreen);
 
         float movementX = size.x / 2;
         float movementZ = size.z / 2;
 
-        CreateWall(new Vector3(1, 0.5f, depthScreen), size, new Vector3(movementX, 0, 0));      //right
-        CreateWall(new Vector3(0, 0.5f, depthScreen), size, new Vector3(-movementX, 0, 0));     //left
+        CreateWall(new Vector3(1, 0.5f, depthScreen), size, new Vector3(movementX, 0, 0));     //right
+        CreateWall(new Vector3(0, 0.5f, depthScreen), size, new Vector3(-movementX, 0, 0));    //left
         CreateWall(new Vector3(0.5f, 1, depthScreen), size, new Vector3(0, 0, movementZ));     //up
         CreateWall(new Vector3(0.5f, 0, depthScreen), size, new Vector3(0, 0, -movementZ));    //down
     }
@@ -206,7 +227,7 @@ public class GameManager : MonoBehaviour
     {
         //get size for the wall from the screen width and height
         Vector3 left = cam.ViewportToWorldPoint(new Vector3(0, 0, depth));
-        Vector3 right = cam.ViewportToWorldPoint(new Vector3(1, 2, depth));
+        Vector3 right = cam.ViewportToWorldPoint(new Vector3(2, 2, depth));
 
         Vector3 size = right - left;
 
@@ -238,7 +259,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(1);
 
         //spawn asteroids
-        SpawnObject(asteroidReference, numberAsteroids);
+        SpawnObject(asteroidReference, numberAsteroids, GetSize(true), GetSpeed(true), GetSoundFunction(true));
 
         calledSpawnAsteroids = false;
     }
@@ -251,17 +272,92 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(Random.Range(minTimeAlien, maxTimeAlien));
 
         //spawn alien
-        SpawnObject(alienReference, 1);
+        SpawnObject(alienReference, 1, GetSize(false), GetSpeed(false), GetSoundFunction(false));
+
+        //change game music
+        audioManager.ChangeGameMusic(true);
     }
 
-    void SpawnObject(GameObject prefab, int numberOfObjects)
+    void SpawnObject(GameObject prefab, int numberOfObjects, Vector3 size, float speed, System.Action<AudioClip> soundFunction)
     {
         //instantiate and set
         for(int i = 0; i < numberOfObjects; i++)
         {
             GameObject go = Instantiate(prefab);
-            go.GetComponent<ICreation>().Create();
+            go.GetComponent<ICreation>().Create(RandomPosition(), size, GetDirection(), speed, soundFunction);
         }
+    }
+
+    Vector3 RandomPosition()
+    {
+        //return random position outside of the screen
+
+        //-1 == down, 0 = in screen, 1 = up
+        int y = Random.Range(-1, 2);
+
+        Vector3 screenPosition = Vector3.zero;
+
+        if (y == 1)
+        {
+            //up, random x
+            screenPosition.x = Random.Range(0f, 1f);
+            screenPosition.y = 1.01f;
+        }
+        else if (y == -1)
+        {
+            //down, random x
+            screenPosition.x = Random.Range(0f, 1f);
+            screenPosition.y = -1.01f;
+        }
+        else
+        {
+            //0 == left, 1 == right
+            screenPosition.x = Random.Range(0, 2) == 0 ? -1.01f : 1.01f;
+
+            //random y
+            screenPosition.y = Random.Range(0f, 1f);
+        }
+
+        //return to world point and set y to 0
+        Vector3 worldPosition = cam.ViewportToWorldPoint(screenPosition);
+        worldPosition.y = 0;
+
+        return worldPosition;
+    }
+
+    Vector3 GetSize(bool isAsteroid)
+    {
+        if (isAsteroid)
+            return new Vector3(5, 5, 5);
+        else
+        {
+            float size = Random.Range(1f, 1.5f);
+            return new Vector3(size, size, size);                
+        }
+    }
+
+    Vector3 GetDirection()
+    {
+        //return new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)).normalized;
+        Vector2 dir = Random.insideUnitCircle.normalized;
+
+        return new Vector3(dir.x, 0, dir.y);
+    }
+
+    float GetSpeed(bool isAsteroid)
+    {
+        if (isAsteroid)
+            return Random.Range(250, 300);
+        else
+            return 3;
+    }
+
+    System.Action<AudioClip> GetSoundFunction(bool isAsteroid)
+    {
+        if (isAsteroid) 
+            return audioManager.GetAsteroidFunction();
+        else 
+            return audioManager.GetAlienFunction();
     }
 
     #endregion
@@ -351,6 +447,8 @@ public class GameManager : MonoBehaviour
         {
             //life -1 and update UI
             actualShip.life -= 1;
+            actualShip.OnPlayerSound(actualShip.sound_shipDestroy);
+
             uiManager.SetCurrentShipLife();
 
             //disable ship and respawn after few seconds
@@ -358,7 +456,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    #region utility
+    public void DestroyAlien()
+    {
+        canSpawnAlien = true;
+        audioManager.ChangeGameMusic(false);
+    }
+
+    public void GetPlayerSoundFunction()
+    {
+        actualShip.OnPlayerSound = audioManager.GetPlayerFunction();
+    }
 
     public Vector3 CrossScreen(Vector3 position, float max, float min)
     {
@@ -387,45 +494,6 @@ public class GameManager : MonoBehaviour
 
         return newPosition;
     }
-
-    public Vector3 RandomPosition()
-    {
-        //return random position outside of the screen
-
-        //-1 == down, 0 = in screen, 1 = up
-        int y = Random.Range(-1, 2);
-
-        Vector3 screenPosition = Vector3.zero;
-
-        if (y == 1)
-        {
-            //up, random x
-            screenPosition.x = Random.Range(0f, 1f);
-            screenPosition.y = 1.1f;
-        }
-        else if (y == -1)
-        {
-            //down, random x
-            screenPosition.x = Random.Range(0f, 1f);
-            screenPosition.y = -1.1f;
-        }
-        else
-        {
-            //0 == left, 1 == right
-            screenPosition.x = Random.Range(0, 2) == 0 ? -1.1f : 1.1f;
-
-            //random y
-            screenPosition.y = Random.Range(0f, 1f);
-        }
-
-        //return to world point and set y to 0
-        Vector3 worldPosition = cam.ViewportToWorldPoint(screenPosition);
-        worldPosition.y = 0;
-
-        return worldPosition;
-    }
-
-    #endregion
 
     #endregion
 

@@ -266,6 +266,8 @@ MonoBehaviour:
   rateOfFire: 5
   shotReference: {fileID: 4392491329962148481, guid: 1bcb3f7ce79affa40b767632e4469664,
     type: 3}
+  sound_alienShot: {fileID: 8300000, guid: 02197168325c6e341b6cff51dd110e86, type: 3}
+  sound_alienDestroy: {fileID: 8300000, guid: ddcdd63bd7faa8249b5090b6edbc07f3, type: 3}
 --- !u!54 &-6962964448785101889
 Rigidbody:
   m_ObjectHideFlags: 0

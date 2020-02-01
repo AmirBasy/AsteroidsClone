@@ -10,14 +10,24 @@ public class Ship : MonoBehaviour
     public bool invincible = false;
     public GameObject shotReference;
 
+    public AudioClip sound_shipDestroy;
+    public AudioClip sound_shipShot;
+    [HideInInspector] public AudioSource audioSource;
+    [HideInInspector] public System.Action<AudioClip> OnPlayerSound;
+
     protected Rigidbody rb;
     protected GameManager gameManager;
 
     protected virtual void Start()
     {
+        audioSource = GetComponent<AudioSource>();
+
         rb = GetComponent<Rigidbody>();
 
-        gameManager = FindObjectOfType<GameManager>();
+        gameManager = GameManager.instance;
+
+        if(gameManager != null)
+            gameManager.GetPlayerSoundFunction();
     }
     
     protected virtual void Update()
@@ -74,6 +84,9 @@ public class Ship : MonoBehaviour
         bool isPlayerShot = true;
 
         newShot.GetComponent<Shot>().CreateShot(GetForwardPosition(this.transform), GetForward(this.transform), isPlayerShot);
+
+        //sound
+        OnPlayerSound(sound_shipShot);
     }
 
     protected virtual GameObject IstantiateShot(GameObject prefab)

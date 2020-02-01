@@ -61,8 +61,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a445f02bae35da3479cf6a97c6b454ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scoreTogive: 10
+  scoreToGive: 10
   scoreDestroyed: 100
+  sound_asteroidSplit: {fileID: 8300000, guid: 3a6024bc21bba114d863424170985e38, type: 3}
+  sound_asteroidDestroy: {fileID: 8300000, guid: eba44f9d3d6b74b4dae8f02581ddcdb3,
+    type: 3}
 --- !u!1 &647470261177020026
 GameObject:
   m_ObjectHideFlags: 0
