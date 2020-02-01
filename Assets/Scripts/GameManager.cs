@@ -17,13 +17,14 @@ public class GameManager : MonoBehaviour
 
     [HideInInspector] public Ship actualShip;
     [HideInInspector] public List<GameObject> asteroids = new List<GameObject>();
-    [HideInInspector] public bool canSpawnAlien;
-
-    bool calledSpawnAsteroids;
+    
+    bool canSpawnAlien;
 
     AudioManager audioManager;
     UiManager uiManager;
     Camera cam;
+
+    Coroutine spawnAsteroids, spawnAlien, respawnShip;
 
     void Awake()
     {
@@ -36,8 +37,8 @@ public class GameManager : MonoBehaviour
         if (SceneManager.GetActiveScene().name != "Gameplay")
             return;
 
-        //press to pause or resume game
-        if (Input.GetKeyDown(KeyCode.Escape))
+        //press to pause or resume game (can't set pause when ship destroyed)
+        if (Input.GetKeyDown(KeyCode.Escape) && actualShip.enabled)
         {
             bool isPaused = Time.timeScale == 0;
 
@@ -83,9 +84,9 @@ public class GameManager : MonoBehaviour
         uiManager = FindObjectOfType<UiManager>();
         cam = Camera.main;
 
+        actualScore = 0;
         asteroids.Clear();
         canSpawnAlien = true;
-        calledSpawnAsteroids = false;
 
         //create limits
         CreateLimits();
@@ -93,32 +94,43 @@ public class GameManager : MonoBehaviour
 
     #region scene Control
 
-    public void GoToMenu()
+    void ResetValueChangeScene()
+    {
+        StopCoroutines();
+        instance.audioManager.ChangeGameMusic(false);
+    }
+
+    void StopCoroutines()
     {
         StopAllCoroutines();
+
+        spawnAsteroids = null;
+        spawnAlien = null;
+        respawnShip = null;
+    }
+
+    public void GoToMenu()
+    {
+        ResetValueChangeScene();
         Time.timeScale = 1; //if called from pause menù
-        instance.audioManager.ChangeGameMusic(false);
         SceneManager.LoadScene("MainMenu");
     }
 
     public void GoToGameplay()
     {
-        StopAllCoroutines();
-        instance.audioManager.ChangeGameMusic(false);
+        ResetValueChangeScene();
         SceneManager.LoadScene("Gameplay");
     }
 
     public void Win()
     {
-        StopAllCoroutines();
-        instance.audioManager.ChangeGameMusic(false);
+        ResetValueChangeScene();
         SceneManager.LoadScene("WinScene");
     }
 
     public void Lose()
     {
-        StopAllCoroutines();
-        instance.audioManager.ChangeGameMusic(false);
+        ResetValueChangeScene();
         SceneManager.LoadScene("LoseScene");
     }
 
@@ -158,18 +170,18 @@ public class GameManager : MonoBehaviour
     void CheckSpawnAsteroids()
     {
         //when there are no asteroids
-        if (asteroids.Count <= 0 && !calledSpawnAsteroids)
+        if (asteroids.Count <= 0 && spawnAsteroids == null)
         {
-            StartCoroutine(SpawnAsteroids());
+            spawnAsteroids = StartCoroutine(SpawnAsteroids());
         }
     }
 
     void CheckSpawnAlien()
     {
         //if can spawn alien
-        if(canSpawnAlien)
+        if(canSpawnAlien && spawnAlien == null)
         {
-            StartCoroutine(SpawnAlien());
+            spawnAlien = StartCoroutine(SpawnAlien());
         }
     }
 
@@ -253,15 +265,13 @@ public class GameManager : MonoBehaviour
 
     IEnumerator SpawnAsteroids()
     {
-        calledSpawnAsteroids = true;
-
         //wait
         yield return new WaitForSeconds(1);
 
         //spawn asteroids
         SpawnObject(asteroidReference, numberAsteroids, GetSize(true), GetSpeed(true), GetSoundFunction(true));
 
-        calledSpawnAsteroids = false;
+        spawnAsteroids = null;
     }
 
     IEnumerator SpawnAlien()
@@ -270,12 +280,14 @@ public class GameManager : MonoBehaviour
 
         //wait random between min and max
         yield return new WaitForSeconds(Random.Range(minTimeAlien, maxTimeAlien));
-
+        
         //spawn alien
         SpawnObject(alienReference, 1, GetSize(false), GetSpeed(false), GetSoundFunction(false));
 
         //change game music
         audioManager.ChangeGameMusic(true);
+
+        spawnAlien = null;
     }
 
     void SpawnObject(GameObject prefab, int numberOfObjects, Vector3 size, float speed, System.Action<AudioClip> soundFunction)
@@ -391,6 +403,8 @@ public class GameManager : MonoBehaviour
         //remove invincible after few seconds
         yield return new WaitForSeconds(2);
         SetInvincible(false);
+
+        respawnShip = null;
     }
 
     void Disable(MonoBehaviour script)
@@ -424,7 +438,8 @@ public class GameManager : MonoBehaviour
 
     void SetInvincible(bool invincible)
     {
-        actualShip.invincible = invincible;
+        if(actualShip != null)
+            actualShip.invincible = invincible;
     }
 
     #endregion
@@ -452,7 +467,8 @@ public class GameManager : MonoBehaviour
             uiManager.SetCurrentShipLife();
 
             //disable ship and respawn after few seconds
-            StartCoroutine(RespawnShip());
+            if(respawnShip == null)
+                respawnShip = StartCoroutine(RespawnShip());
         }
     }
 

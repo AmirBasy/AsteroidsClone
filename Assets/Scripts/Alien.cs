@@ -22,6 +22,8 @@ public class Alien : MonoBehaviour, ICreation
     protected virtual void Awake()
     {
         gameManager = GameManager.instance;
+
+        timerShot = Time.time + rateOfFire;
     }
 
     protected virtual void Update()

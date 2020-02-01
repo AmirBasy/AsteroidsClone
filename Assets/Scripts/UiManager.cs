@@ -18,8 +18,11 @@ public class UiManager : MonoBehaviour
     {
         gameManager = GameManager.instance;
 
-        if(gameManager != null)
+        if (gameManager != null)
+        {
             SetCurrentShipLife();
+            pauseMenu.transform.Find("Panel").Find("Resume_Button").GetComponent<Button>().onClick.AddListener(gameManager.ResumeGame);
+        }
     }
 
     public void SetCurrentShipLife()
