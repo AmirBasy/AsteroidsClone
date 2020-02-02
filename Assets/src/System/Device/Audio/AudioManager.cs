@@ -5,7 +5,7 @@ using System;
 
 public class AudioManager : MonoBehaviour
 {
-    public static AudioManager sound_cue;
+    public static AudioManager current;
 
     private SFX[] resource;
 
@@ -17,7 +17,7 @@ public class AudioManager : MonoBehaviour
     #region UNITYCALLBACKS
     protected void Awake()
     {
-        sound_cue = this;
+        current = this;
     }
     protected void Start()
     {
@@ -25,22 +25,19 @@ public class AudioManager : MonoBehaviour
         init_resources();
 
         //Execute All Playable tracks : OnGameBegin : TEST
-        for(int i=0; i<resource.Length; i++)
+        for(int i=0; i<gameObject.GetComponents<SFX>().Length; i++)
         {
-            if(resource[i].type == SFX_TYPE.Music) { Play(resource[i]); }
+            if(resource[i].type == SFX_TYPE.Music || resource[i].type == SFX_TYPE.Environment) 
+            {
+                Play(resource[i]);
+            }
         }
     }
     #endregion
     private void init_resources()
     {
-        for(int i=0; i<resource.Length; i++)
-        {
-            //get resources of this entity
-            resource[i] = GetComponent<SFX>();
-        }
-
-        //sort resources by priority
-        resource = SortByPriority(resource);
+        //get all resources of this entity
+        resource = GetComponents<SFX>();
 
         //setup all tracks 
         SetupTracksByType(resource);
@@ -50,40 +47,6 @@ public class AudioManager : MonoBehaviour
     {
         sc.track.Play();
     }
-    private SFX[] SortByPriority(SFX[] scs)
-    {
-        SFX[] priorized_list = null;
-        int counter = 0;
-
-        //select tracks with priority 1
-        for(int i=0; i<scs.Length; i++)
-        {
-            if(scs[i].priority==1)
-            {
-                priorized_list[counter] = scs[i];
-                counter++;
-            }
-
-        }
-        for(int q = counter; q<scs.Length; q++)
-        {
-            if(scs[q].priority == 2)
-            {
-                priorized_list[counter] = scs[q];
-                counter++;
-            }
-        }
-        for(int k = counter; k<scs.Length; k++)
-        {
-            if(scs[k].priority == 3)
-            {
-                priorized_list[counter] = scs[k];
-                counter++;
-            }
-        }
-
-        return priorized_list;
-    }
     private void SetupTracksByType(SFX[] scs)
     {
         for(int i=0; i<scs.Length; i++)
@@ -91,21 +54,22 @@ public class AudioManager : MonoBehaviour
             switch(scs[i].priority)
             {
                 case (1):
-                    SetupTrack(scs[i], 7, 5);
+                    SetupTrack(scs[i], 1, 1, 0.5f);
                     break;
                 case (2):
-                    SetupTrack(scs[i], 5, 5);
+                    SetupTrack(scs[i], 0.5f, 1, 0.5f);
                     break;
                 case (3):
-                    SetupTrack(scs[i], 3, 5);
+                    SetupTrack(scs[i], 0.2f, 1, 0.5f);
                     break;
             }
         }
     }
-
-    private void SetupTrack(SFX sc, float volume, float pitch)
+    private void SetupTrack(SFX sc, float volume, float pitch, float reverb)
     {
+        sc.track.clip = sc.clip;
         sc.track.volume = volume;
-        sc.track.pitch = 10;
+        sc.track.pitch = pitch;
+        sc.track.reverbZoneMix = reverb;
     }
 }
