@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DebrisMovementComponent : MonoBehaviour
+public class DebrisMovementComponent : Component
 {
     [Header("Movement")]
     public float _speed;

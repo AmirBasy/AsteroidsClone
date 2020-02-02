@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ProjectileMovementComponent : MonoBehaviour
+public class ProjectileMovementComponent : Component
 {
     private GameObject _spaceship;
     private GameObject _gunOffset;

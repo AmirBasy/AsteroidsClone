@@ -14,7 +14,7 @@ enum Cordinates
     SW
 }
 
-public class AsteroidMovementComponent : MonoBehaviour
+public class AsteroidMovementComponent : Component
 {
     private Rigidbody _rb;
 
@@ -28,7 +28,10 @@ public class AsteroidMovementComponent : MonoBehaviour
 
     protected void Awake()
     {
-        _rb = this.gameObject.GetComponent<Rigidbody>();
+        //_rb = this.gameObject.GetComponent<Rigidbody>();
+        _rb = gameObject.AddComponent<Rigidbody>();
+
+        _rb.useGravity = false;
 
         _directions.Add(Cordinates.N, new Vector3(0, 1, 0));
         _directions.Add(Cordinates.S, new Vector3(0, -1, 0));
