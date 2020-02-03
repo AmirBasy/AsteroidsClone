@@ -7,13 +7,13 @@ public class ProjectileManager : MonoBehaviour
 
     public GameObject _projectilePrefab;
 
+
     public void SpawnProjectile(GameObject offset)
     {
 
         GameObject _projectile = CreateProjectile();
 
         _projectile.transform.position = offset.transform.position;
-
     }
 
     private GameObject CreateProjectile()

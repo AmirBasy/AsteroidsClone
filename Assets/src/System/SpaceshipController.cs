@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class SpaceshipController : Controller
 {
@@ -21,7 +22,8 @@ public class SpaceshipController : Controller
     private ProjectileManager _pm;
     public GameObject _gunOffset;
 
-    
+    /*ACTIONS*/
+    private event Action PlayShotAudioSource;
 
     private void Awake()
     {
@@ -33,6 +35,7 @@ public class SpaceshipController : Controller
 
         _pm = this.gameObject.GetComponent<ProjectileManager>();
 
+        PlayShotAudioSource += AudioManager.current.PlayShot;
     }
 
     protected new void Update()
@@ -47,6 +50,8 @@ public class SpaceshipController : Controller
         if(Input.GetKeyDown(KeyCode.Space))
         {
             _pm.SpawnProjectile(_gunOffset);
+
+            PlayShotAudioSource.Invoke();
         }
         
     }

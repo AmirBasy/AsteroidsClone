@@ -9,15 +9,16 @@ public class AudioManager : MonoBehaviour
 
     private SFX[] resource;
 
-    private static event Action<SFX> OnTrackStart;
-    private static event Action<SFX> OnTrackEnd;
-    private static event Action<SFX> OnTrackLoop;
-    private static event Action<SFX> OnGameBegin;
+   
+    private event Action OnGameBegin;
+    public event Action OnShot;
 
     #region UNITYCALLBACKS
     protected void Awake()
     {
         current = this;
+
+        OnGameBegin += PlayTheme;
     }
     protected void Start()
     {
@@ -25,9 +26,15 @@ public class AudioManager : MonoBehaviour
         init_resources();
 
         //Execute All Playable tracks : OnGameBegin : TEST
-        for(int i=0; i<gameObject.GetComponents<SFX>().Length; i++)
+        OnGameBegin.Invoke();
+
+    }
+
+    private void PlayTheme()
+    {
+        for (int i = 0; i < gameObject.GetComponents<SFX>().Length; i++)
         {
-            if(resource[i].type == SFX_TYPE.Music || resource[i].type == SFX_TYPE.Environment) 
+            if (resource[i].type == SFX_TYPE.Music || resource[i].type == SFX_TYPE.Environment)
             {
                 Play(resource[i]);
             }
@@ -54,7 +61,7 @@ public class AudioManager : MonoBehaviour
             switch(scs[i].priority)
             {
                 case (1):
-                    SetupTrack(scs[i], 1, 1, 0.5f);
+                    SetupTrack(scs[i], 0.7f, 1, 0.5f);
                     break;
                 case (2):
                     SetupTrack(scs[i], 0.5f, 1, 0.5f);
@@ -71,5 +78,11 @@ public class AudioManager : MonoBehaviour
         sc.track.volume = volume;
         sc.track.pitch = pitch;
         sc.track.reverbZoneMix = reverb;
+    }
+   
+    //choce the track to execute
+    public void PlayShot()
+    {
+        resource[2].track.Play();
     }
 }
