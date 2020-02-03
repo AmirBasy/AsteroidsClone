@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class BehaviourAsteroid : MonoBehaviour
 {
+
     public Camera cam;
     public Rigidbody asteroid;
-    public Asteroids ast;
+    Asteroids ast;
     int border;
 
-    void CrossScreen()
+
+    void CrossScreen()                                              //funzione che permette di sapere se l'asteroide si trova all'interno della camera
     {
         Vector3 screenPoint = cam.WorldToViewportPoint(transform.position);
 
@@ -27,49 +29,52 @@ public class BehaviourAsteroid : MonoBehaviour
 
     }
 
-    void Move()
+    void move()                                                     //funzione per far muovere l'asteroide
     {
-        
+        border = ast.bordo;
 
         if(border == 0)
         {
             int position = Random.Range(-9, 9);
-            asteroid.AddForce(Vector3.right * 100 * Time.deltaTime);
+            asteroid.AddForce(Vector3.right * 10000 * Time.deltaTime);
         }
 
         if (border == 1)
         {
             int position = Random.Range(-11, 11);
-            asteroid.AddForce(Vector3.forward * -100 * Time.deltaTime);
+            asteroid.AddForce(Vector3.forward * -10000 * Time.deltaTime);
         }
 
         if (border == 2)
         {
             int position = Random.Range(-11, 11);
-            asteroid.AddForce(Vector3.forward * 100 * Time.deltaTime);
+            asteroid.AddForce(Vector3.forward * 10000 * Time.deltaTime);
         }
 
         if (border == 3)
         {
             int position = Random.Range(-9, 9);
-            asteroid.AddForce(Vector3.right * -100 * Time.deltaTime);
+            asteroid.AddForce(Vector3.right * -10000 * Time.deltaTime);
         }
 
         
     }
 
 
-    void Start()
+    private void Awake()
     {
-        //ast = FindObjectOfType<Asteroids>();
-        cam = Camera.main;// FindObjectOfType<Camera>();
-        border = ast.bordo;
+        ast = FindObjectOfType<Asteroids>();
+        cam = FindObjectOfType<Camera>();
+    }
+
+    void Start()
+    {   
+        move();
     }
 
     void Update()
     {
-        CrossScreen();
-        //Move();
+        CrossScreen();          
     }
 
 }

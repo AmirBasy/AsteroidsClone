@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class UiManager : MonoBehaviour
 {
+
     public string TextInScore = "Score :";
     public Text Score;
     public Transform LifeToSpawn;
@@ -12,14 +13,8 @@ public class UiManager : MonoBehaviour
     public GameObject lifePrefab0, lifePrefab1, lifePrefab2;
     int playerLife;
 
-    private void Awake()
-    {
-        GameManager = FindObjectOfType<GameManager>();
-        Score.text = TextInScore + GameManager.ActualScore;
-        SetCurrentShipLife();
-    }
 
-    void activeUi()
+    void activeUi()                                                                         //funzione per far cambiare a schermo le vite del giocatore
     {
         if (playerLife == 3)
         {
@@ -27,6 +22,7 @@ public class UiManager : MonoBehaviour
             lifePrefab1.SetActive(true);
             lifePrefab2.SetActive(true);
         }
+
         if (playerLife == 2)
         {
             lifePrefab0.SetActive(true);
@@ -49,9 +45,17 @@ public class UiManager : MonoBehaviour
         }
     }
 
-    void SetCurrentShipLife()
+    void SetCurrentShipLife()                                                               //funzione per settare la vita del giocatore
     {
         playerLife = GameManager.ActualShip.Life;
+    }
+
+
+    private void Awake()
+    {
+        GameManager = FindObjectOfType<GameManager>();
+        Score.text = TextInScore + GameManager.ActualScore;
+        SetCurrentShipLife();
     }
 
     private void Update()
@@ -59,6 +63,5 @@ public class UiManager : MonoBehaviour
         Score.text = TextInScore + GameManager.ActualScore;
         SetCurrentShipLife();
         activeUi();
-
     }
 }

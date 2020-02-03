@@ -4,36 +4,44 @@ using UnityEngine;
 
 public class Asteroids : MonoBehaviour
 {
+
     public GameObject AsteroidPrefab;
     public int bordo;
     float timer=0;
     
 
-    int SpawnAsteroid()
+    int SpawnAsteroid()                                             //funzione per far spawnare gli asteroidi
     {
         int border = Random.Range(0, 4);
 
-        Vector3 targetPosition = Vector3.zero;
+        if (border == 0)
+        {
+            int position = Random.Range(-9, 9);
+            GameObject newAsteroid = Instantiate(AsteroidPrefab, new Vector3(-12.5f, 0, position), transform.rotation);
+        }
 
-        if (border == 0) targetPosition= new Vector3(-12.5f, 0, Random.Range(-9, 9));
-        if (border == 1) targetPosition= new Vector3(Random.Range(-11, 11) , 0, 9);
-        if (border == 2) targetPosition= new Vector3(Random.Range(-11, 11), 0, -9);
-        if (border == 3) targetPosition= new Vector3(12.5f, 0, Random.Range(-9, 9));
+        if (border == 1)
+        {
+            int position = Random.Range(-11, 11);
+            GameObject newAsteroid = Instantiate(AsteroidPrefab, new Vector3(position, 0, 9), transform.rotation);
+        }
 
-        float lunghezza = targetPosition.magnitude;
-        Vector3 vettoreNormalizzato = targetPosition.normalized;
+        if (border == 2)
+        {
+            int position = Random.Range(-11, 11);
+            GameObject newAsteroid = Instantiate(AsteroidPrefab, new Vector3(position, 0, -9), transform.rotation);
+        }
 
-        GameObject newAsteroid = Instantiate(AsteroidPrefab, targetPosition, transform.rotation);
-        newAsteroid.GetComponent<BehaviourAsteroid>().ast = this;
-        newAsteroid.GetComponent<Rigidbody>().velocity = -targetPosition.normalized * 5;
+        if (border == 3)
+        {
+            int position = Random.Range(-9, 9);
+            GameObject newAsteroid = Instantiate(AsteroidPrefab, new Vector3(12.5f, 0, position), transform.rotation);
+        }
 
         return border;
+
     }
 
-
-    void Start()
-    {
-    }
 
     void Update()
     {

@@ -4,16 +4,17 @@ using UnityEngine;
 
 public class Shot : MonoBehaviour
 {
+
     public float velocity = 50;
     public Vector3 direction = Vector3.forward;
     public Camera cam;
     GameManager GameManager;
 
-    void Move()
+
+    void Move()                                                                           //funzione per far avanzare il proiettile
     {
         transform.Translate(direction * velocity * Time.deltaTime);
     }
-
 
     private void OnTriggerEnter(Collider collider)                                        //funzione per distruggre l'asteroide e il colpo 
     {
@@ -25,16 +26,8 @@ public class Shot : MonoBehaviour
         }     
     }
 
-    void Start()
+    void CrossScreen()                                                                    //funzione che permette di sapere se il proiettile si trova all'interno della camera
     {
-        cam = FindObjectOfType<Camera>();
-        GameManager = FindObjectOfType<GameManager>();
-    }
-
-    void Update()
-    {
-        Move();
-
         Vector3 screenPoint = cam.WorldToViewportPoint(transform.position);
 
         if (screenPoint.x > 1)
@@ -53,5 +46,19 @@ public class Shot : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+
+    }
+
+
+    private void Awake()
+    { 
+        cam = FindObjectOfType<Camera>();
+        GameManager = FindObjectOfType<GameManager>();
+    }
+
+    void Update()
+    {
+        Move();
+        CrossScreen();
     }
 }

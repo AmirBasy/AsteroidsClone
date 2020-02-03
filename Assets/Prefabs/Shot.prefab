@@ -139,6 +139,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   velocity: 12
   direction: {x: 0, y: 0, z: 1}
+  cam: {fileID: 0}
+  explosion: {fileID: 0}
 --- !u!54 &1328420007
 Rigidbody:
   m_ObjectHideFlags: 0

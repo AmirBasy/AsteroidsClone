@@ -144,6 +144,9 @@ MonoBehaviour:
     type: 3}
   Life: 3
   cam: {fileID: 0}
+  shot: {fileID: 0}
+  accelerate: {fileID: 0}
+  die: {fileID: 0}
 --- !u!54 &1130077704798215701
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -250,8 +253,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1.488348}
-  m_Center: {x: 0, y: 0, z: 0.244174}
+  m_Size: {x: 1, y: 1, z: 1.5024347}
+  m_Center: {x: 0, y: 0, z: 0.25121737}
 --- !u!1 &1130077704967304354
 GameObject:
   m_ObjectHideFlags: 0
