@@ -1,18 +1,25 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Asteroid : Obstacle
 {
+    private event Action OnHit;
     private Vector3 _originalSize;
     public Vector3 _minSize; //the size value to have for being destroyed
 
     GameManager _gm;
 
     #region Unity Callbacks
+    private void Awake()
+    {
+        OnHit += AudioManager.current.PlayExplotion;
+    }
     private void Start()
     {
-        _gm = Object.FindObjectsOfType<GameManager>()[0];
+        _gm = FindObjectsOfType<GameManager>()[0];
 
         _originalSize = this.gameObject.transform.localScale;
     }
@@ -27,6 +34,7 @@ public class Asteroid : Obstacle
             if (this.gameObject.transform.localScale == _minSize)
             {
                 _gm.AddScore(25);
+                OnHit.Invoke();
                 Destroy(this.gameObject);
             }
             else
@@ -39,7 +47,7 @@ public class Asteroid : Obstacle
                 for (int i = 0; i< _debrisInstance.Length; i++)
                 {
                     _debrisInstance[i].gameObject.GetComponent<DebrisMovementComponent>()._owner = this.gameObject;
-                    _debrisInstance[i].gameObject.GetComponent<DebrisMovementComponent>()._direction = _debrisInstance[i].gameObject.GetComponent<DebrisMovementComponent>().GetRotatedVector(_debrisInstance[i].gameObject.GetComponent<DebrisMovementComponent>().GetDirection(), Random.Range(-45, 45));
+                    _debrisInstance[i].gameObject.GetComponent<DebrisMovementComponent>()._direction = _debrisInstance[i].gameObject.GetComponent<DebrisMovementComponent>().GetRotatedVector(_debrisInstance[i].gameObject.GetComponent<DebrisMovementComponent>().GetDirection(), Random.Range(-45,45));
                     _debrisInstance[i].gameObject.GetComponent<DebrisMovementComponent>()._ownerSet = true;
                 }
 

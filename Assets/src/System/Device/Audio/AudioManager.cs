@@ -11,7 +11,6 @@ public class AudioManager : MonoBehaviour
 
    
     private event Action OnGameBegin;
-    public event Action OnShot;
 
     #region UNITYCALLBACKS
     protected void Awake()
@@ -84,5 +83,9 @@ public class AudioManager : MonoBehaviour
     public void PlayShot()
     {
         resource[2].track.Play();
+    }
+    public void PlayExplotion()
+    {
+        resource[3].track.Play();
     }
 }
