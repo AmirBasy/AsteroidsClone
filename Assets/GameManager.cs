@@ -26,14 +26,14 @@ public class GameManager : MonoBehaviour
 
     public void GoToEndMenu()
     {
-        SceneManager.LoadScene(2);
+        SceneManager.LoadScene(0);
     }
 
     public void VictoryCondition()
     {
         if (ActualScore >= ScoreToWin)
         {
-
+        SceneManager.LoadScene(0);
         }
     }
 
@@ -41,7 +41,18 @@ public class GameManager : MonoBehaviour
     {
         if (ActualShip.Life <= 1)
         {
-            //fai qualcosa
+        SceneManager.LoadScene(0);
         }
+    }
+   
+    public void QuitGame()
+    {
+    Debug.Log("QUIT!");
+    Application.Quit();
+    }
+
+    public void SceneLoader(int SceneIndex)
+    {
+        SceneManager.LoadScene(SceneIndex);
     }
 }
