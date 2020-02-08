@@ -35,9 +35,12 @@ public class Ship : MonoBehaviour
 
     }
 
-    void CrossScreen()
+    private void OnTriggerEnter(Collider collision)
     {
-
+     if (collision.gameObject.name == "Limit_UP") transform.position += new Vector3(0, 0, -24);
+     if (collision.gameObject.name == "Limit_DX") transform.position += new Vector3(-45, 0, 0);
+     if (collision.gameObject.name == "Limit_DOWN") transform.position += new Vector3(0, 0, 24);
+     if (collision.gameObject.name == "Limit_SX") transform.position += new Vector3(45, 0, 0);
     }
 
 
