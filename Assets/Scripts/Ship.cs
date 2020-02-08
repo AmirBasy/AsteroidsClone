@@ -15,11 +15,13 @@ public class Ship : MonoBehaviour
     //Class that contains all the basic information needed by every ship
     public ShipData _data;
 
+    #region Awake
     private void Awake()
     {
         GM = FindObjectOfType<GameManager>();
         turret.localPosition = _data.turretPos;
     }
+    #endregion
 
     #region Movement
     //Movement-related functions
@@ -38,12 +40,15 @@ public class Ship : MonoBehaviour
     }
     #endregion
 
+    #region Shooting
     //Creates a new Shot-type object, at the turret's position
     void Shot()
     {
         Instantiate(shotReference, turret);
     }
+    #endregion
 
+    #region Update + Movement Checking
     //Checks the input for the ship's movement and action
     void Update()
     {
@@ -58,7 +63,9 @@ public class Ship : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         { Shot(); }
     }
+    #endregion
 
+    #region Collision Management
     //Collision control and management
     private void OnCollisionEnter(Collision collision)
     {
@@ -68,12 +75,25 @@ public class Ship : MonoBehaviour
         }
         else if(collision.gameObject.tag == "Enemy")
         {
-            //Die();
+            Damage();   
+        }
+    }
+    #endregion
+
+    #region Damage + Destroy
+    void Damage()
+    {
+        _data.life--;
+        if (_data.life <= 0)
+        {
+            Die();
         }
     }
 
     void Die()
     {
+        GM.LoseCondition();
         Destroy(this.gameObject);
     }
+    #endregion
 }

@@ -13,11 +13,14 @@ public class GameManager : MonoBehaviour
     public bool Pause = false;
     Transform offset;
 
+    #region Awake
     void Awake()
     {
         ActualShip = FindObjectOfType<Ship>();
     }
-    
+    #endregion
+
+    #region Update
     void Update()
     {
         if ( Input.GetKey( KeyCode.Escape ) ) 
@@ -32,6 +35,7 @@ public class GameManager : MonoBehaviour
             spawnTime = 0;
         }
     }
+    #endregion
 
     #region Scene Management
     public void GoToGameplay()
@@ -45,18 +49,20 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
+    #region Victory + Lose Condition
     public void VictoryCondition()
     {
         if (ActualScore >= ScoreToWin)
         {
-
+            //vistory screen
         }
     }
 
     public void LoseCondition()
     {
-
+        //lose screen
     }
+    #endregion
 
     #region Pause
     //TODO: Pause not functioning appropriately, needs ulterior checks and adjustments
@@ -86,6 +92,7 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
+    #region Points Management
     //Increases the score by the amount given by the asteroid, then checks if the victory condition is met
     public void GivePoints (int pointsGiven) 
     {
@@ -93,6 +100,7 @@ public class GameManager : MonoBehaviour
         Debug.Log( string.Format( "Score: {0}", ActualScore ) );
         VictoryCondition();
     }
+    #endregion
 
     #region Asteroid Spawn
     public void SpawnAsteroid()
