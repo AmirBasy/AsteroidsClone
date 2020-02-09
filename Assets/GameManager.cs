@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
     {
         if (ActualScore >= ScoreToWin)
         {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(4);
         }
     }
 
@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
     {
         if (ActualShip.Life <= 1)
         {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(3);
         }
     }
    
