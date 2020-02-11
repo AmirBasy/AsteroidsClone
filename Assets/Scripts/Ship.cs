@@ -8,11 +8,9 @@ public class Ship : MonoBehaviour
     public float rotationVelocity=45;
     public float acceleration;
     public GameObject shotReference;
-    public int Life;
+    public GameObject lifePrefab0, lifePrefab1, lifePrefab2;
+    int playerLife=3;
 
-    private void Awake()
-    {
-    }
     void Rotate(float direction)
     {
         rigibody.AddTorque(transform.up * rotationVelocity * Time.deltaTime * direction);
@@ -30,10 +28,6 @@ public class Ship : MonoBehaviour
         //transform.Translate(Vector3.forward * acceleration * Time.deltaTime);
     }
 
-    void Die()
-    {
-
-    }
 
     private void OnTriggerEnter(Collider collision)
     {
@@ -42,14 +36,36 @@ public class Ship : MonoBehaviour
      if (collision.gameObject.name == "Limit_DOWN") transform.position += new Vector3(0, 0, 24);
      if (collision.gameObject.name == "Limit_SX") transform.position += new Vector3(45, 0, 0);
      if (collision.gameObject.name == "Limit_TOP") transform.position += new Vector3(45, 0, 24);
+     
+    if (collision.gameObject.tag == "Asteroid")
+        {
+            playerLife -= 1;
+            if (playerLife>=2)
+            {
+                Destroy(lifePrefab0.gameObject);
+            }
+            if (playerLife>=1)
+            {
+                Destroy(lifePrefab1.gameObject);
+            }
+        }
     }
-
-
-    // Start is called before the first frame update
-    void Start()
+    
+    private void OnCollisionEnter(Collision collision)
     {
-        
+    if (collision.gameObject.tag == "Asteroid")
+    {
+            playerLife -= 1;
+        if (playerLife>=2)
+        {
+            Destroy(lifePrefab0.gameObject);
+        }
+        if (playerLife>=1)
+        {
+            Destroy(lifePrefab1.gameObject);
+        }
     }
+}
 
     // Update is called once per frame
     void Update()

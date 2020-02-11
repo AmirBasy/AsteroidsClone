@@ -46,6 +46,6 @@ public class UiManager : MonoBehaviour
 
     void SetCurrentShipLife()
     {
-        playerLife = GameManager.ActualShip.Life;
+        //playerLife = GameManager.ActualShip.Life;
     }
 }

@@ -26,7 +26,6 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         VictoryCondition();
-        LoseCondition();
         AsteroidCount();
         if (activeAsteroids <= 0)
         {
@@ -77,14 +76,6 @@ public class GameManager : MonoBehaviour
         if (ActualScore >= ScoreToWin)
         {
         SceneManager.LoadScene(4);
-        }
-    }
-
-    public void LoseCondition()
-    {
-        if (ActualShip.Life <= 1)
-        {
-        SceneManager.LoadScene(3);
         }
     }
    

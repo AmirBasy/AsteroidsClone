@@ -18,15 +18,25 @@ public class Shot : MonoBehaviour
         {
             Die();
         }
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == "Limit, Asteroid")
+        if (other.gameObject.tag == "Asteroid")
         {
             Die();
         }
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Limit")
+        {
+            Die();
+        }
+        if (collision.gameObject.tag == "Asteroid")
+        {
+            Die();
+        }
+    }
+
+
 
     void Move()
     {

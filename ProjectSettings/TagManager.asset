@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Limit
   - Asteroid
+  - Shot
   layers:
   - Default
   - TransparentFX

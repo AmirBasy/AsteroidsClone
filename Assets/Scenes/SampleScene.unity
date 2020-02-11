@@ -304,6 +304,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ship
       objectReference: {fileID: 0}
+    - target: {fileID: 167144, guid: 59f74b7a76eda1d40985f7b6cca27abd, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 413534, guid: 59f74b7a76eda1d40985f7b6cca27abd, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -844,7 +848,9 @@ MonoBehaviour:
   acceleration: 6000
   shotReference: {fileID: 4392491329962148481, guid: 1bcb3f7ce79affa40b767632e4469664,
     type: 3}
-  Life: 3
+  lifePrefab0: {fileID: 1743977259}
+  lifePrefab1: {fileID: 235760778}
+  lifePrefab2: {fileID: 73834450}
 --- !u!65 &678220322
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -856,8 +862,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 14.060125, y: 4.3076906, z: 10.3408375}
-  m_Center: {x: -0.22227883, y: 0.4892181, z: 3.31497}
+  m_Size: {x: 12.991528, y: 0.88835716, z: 10.838748}
+  m_Center: {x: 0.0040858984, y: 2.1075706, z: 4.040837}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -1435,7 +1441,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1909156679}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.7, z: 0}
+  m_LocalPosition: {x: 0, y: -1.2, z: 0}
   m_LocalScale: {x: 4.45, y: 4, z: 2.371}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1481,6 +1487,11 @@ PrefabInstance:
       propertyPath: asteroid
       value: 
       objectReference: {fileID: 100000, guid: 79bce83937e43d042843a359e671ca99, type: 3}
+    - target: {fileID: 1294478147247726813, guid: 23ed0e36e1d87d14ca590c6735f3f335,
+        type: 3}
+      propertyPath: ship
+      value: 
+      objectReference: {fileID: 678220318}
     - target: {fileID: 1294478147247726812, guid: 23ed0e36e1d87d14ca590c6735f3f335,
         type: 3}
       propertyPath: m_LocalPosition.x
