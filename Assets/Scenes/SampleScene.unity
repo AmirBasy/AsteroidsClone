@@ -947,7 +947,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &963194225
 GameObject:
@@ -1359,6 +1359,7 @@ GameObject:
   - component: {fileID: 1909156682}
   - component: {fileID: 1909156681}
   - component: {fileID: 1909156680}
+  - component: {fileID: 1909156684}
   m_Layer: 0
   m_Name: Plane
   m_TagString: Untagged
@@ -1434,12 +1435,25 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1909156679}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.53, z: 0}
+  m_LocalPosition: {x: 0, y: -0.7, z: 0}
   m_LocalScale: {x: 4.45, y: 4, z: 2.371}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1909156684
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1909156679}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 10, y: 2.220446e-16, z: 10}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1294478148379737082
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1452,6 +1466,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
+    - target: {fileID: 1294478147247726813, guid: 23ed0e36e1d87d14ca590c6735f3f335,
+        type: 3}
+      propertyPath: ScoreToWin
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 1294478147247726813, guid: 23ed0e36e1d87d14ca590c6735f3f335,
+        type: 3}
+      propertyPath: ActualShip
+      value: 
+      objectReference: {fileID: 678220320}
+    - target: {fileID: 1294478147247726813, guid: 23ed0e36e1d87d14ca590c6735f3f335,
+        type: 3}
+      propertyPath: asteroid
+      value: 
+      objectReference: {fileID: 100000, guid: 79bce83937e43d042843a359e671ca99, type: 3}
     - target: {fileID: 1294478147247726812, guid: 23ed0e36e1d87d14ca590c6735f3f335,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1507,16 +1536,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1294478147247726813, guid: 23ed0e36e1d87d14ca590c6735f3f335,
-        type: 3}
-      propertyPath: ScoreToWin
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 1294478147247726813, guid: 23ed0e36e1d87d14ca590c6735f3f335,
-        type: 3}
-      propertyPath: ActualShip
-      value: 
-      objectReference: {fileID: 678220320}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 23ed0e36e1d87d14ca590c6735f3f335, type: 3}
 --- !u!1001 &7726261645080647603
@@ -1569,7 +1588,7 @@ PrefabInstance:
     - target: {fileID: 7726261644365488322, guid: 796303c7214cb484695bc7572a24094a,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7726261644365488322, guid: 796303c7214cb484695bc7572a24094a,
         type: 3}
@@ -1640,6 +1659,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Limit_DX
+      objectReference: {fileID: 0}
+    - target: {fileID: 2876689280722040368, guid: 796303c7214cb484695bc7572a24094a,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.68
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 796303c7214cb484695bc7572a24094a, type: 3}

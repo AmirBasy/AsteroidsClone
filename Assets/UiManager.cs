@@ -14,7 +14,7 @@ public class UiManager : MonoBehaviour
 
     private void Awake()
     {
-        Score.text = TextInScore + GameManager.ActualScore;
+        //Score.text = TextInScore + GameManager.ActualScore;
         GameManager = FindObjectOfType<GameManager>();
         SetCurrentShipLife();
     }

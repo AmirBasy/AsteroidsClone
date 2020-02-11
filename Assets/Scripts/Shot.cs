@@ -22,7 +22,7 @@ public class Shot : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Limit")
+        if (collision.gameObject.tag == "Limit, Asteroid")
         {
             Die();
         }
