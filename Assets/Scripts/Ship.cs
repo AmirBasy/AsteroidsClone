@@ -5,14 +5,14 @@ using UnityEngine.UI;
 public class Ship : MonoBehaviour
 {
     public Rigidbody rigibody; //variabile per il rigidbody
-    public float rotationVelocity=45; //inizializza la velocità di rotazione
+    public float rotationVelocity = 45; //inizializza la velocità di rotazione
     public float acceleration; //istanzia la accelerazione
     public GameObject shotReference; //riferimento al proiettile
     public Image images; //riferimento a una immagine
     public int Life; //valore per la vita
     int counter = Vita.maxHealth; //inizializza il couter al massimo delle vite
-    public AudioSource Audio; //variabile per l'audio del proiettile
     public Text GameOver; //variabile per il testo del game over
+    public static int ValueShot = 0; //valore per l'audio del proiettile
 
     void Rotate(float direction)
     {
@@ -21,8 +21,8 @@ public class Ship : MonoBehaviour
 
     void Shot()
     {
+        ValueShot = 1;
         GameObject newShot = Instantiate(shotReference, transform.position, transform.localRotation); //instanzia l'oggetto
-        Audio.Play(); //attiva il suono di uno sparo
     }
 
     void Accelerate()
@@ -32,7 +32,7 @@ public class Ship : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.tag == "AsteroidS" || collision.gameObject.tag == "AsteroidM" || collision.gameObject.tag == "AsteroidL") //si attiva quando collide con gli asteroidi
+        if (collision.gameObject.tag == "AsteroidS" || collision.gameObject.tag == "AsteroidM" || collision.gameObject.tag == "AsteroidL") //si attiva quando collide con gli asteroidi
         {
             if (Vita.maxHealth == 0) //se la vita scende a 0
             {
@@ -51,12 +51,12 @@ public class Ship : MonoBehaviour
         if (collision.gameObject.tag == "LimitDx") //si attiva quando collide con un oggetto che ha come tag LimitDx
         {
             float i = transform.position.z; //setta posizione z
-            transform.position = new Vector3(-35, 0, i); //aggiorna la posizione
+            transform.position = new Vector3(-30, 0, i); //aggiorna la posizione
         }
         if (collision.gameObject.tag == "LimitSx") //si attiva quando collide con un oggetto che ha come tag LimitSx
         {
             float i = transform.position.z; //setta posizione z
-            transform.position = new Vector3(35, 0, i); //aggiorna la posizione
+            transform.position = new Vector3(30, 0, i); //aggiorna la posizione
         }
         if (collision.gameObject.tag == "LimitUp") //si attiva quando collide con un oggetto che ha come tag LimitUp
         {
@@ -80,7 +80,11 @@ public class Ship : MonoBehaviour
         if (Input.GetKey(KeyCode.D)) Rotate(1); //ruota a destra
         if (Input.GetKey(KeyCode.W)) Accelerate(); //accellera
         if (Input.GetKeyDown(KeyCode.Space)) Shot(); //spara
-        print("Healh "+Vita.maxHealth); //stampa la vita in console
+        print("Healh " + Vita.maxHealth); //stampa la vita in console
         print("counter " + counter); //stampa il counter in console
+        if (GameObject.FindGameObjectsWithTag("AsteroidS").Length == 0 && GameObject.FindGameObjectsWithTag("AsteroidM").Length == 0 && GameObject.FindGameObjectsWithTag("AsteroidL").Length == 0) //controlla se nella scena ci sono oggetti con determinati tag
+        {
+            GameOver.text = "Hai Vinto"; //compare la scritta game over
+        }
     }
 }
