@@ -7,6 +7,7 @@ public class Teleport : MonoBehaviour
     // Start is called before the first frame update
     public Transform LimitDown;
     public GameObject Ship;
+    public GameObject AsteroidBig;
    
     void Start()
     {
@@ -21,9 +22,10 @@ public class Teleport : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Limit")
-        {
-            transform.Translate(0f, 0f, -25f);
-        }
+        Ship.transform.position = LimitDown.transform.position;
+    }
+    void OnCollisionEnter(Collision collision)
+    {
+        AsteroidBig.transform.position = LimitDown.transform.position;
     }
 }

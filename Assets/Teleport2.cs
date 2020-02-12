@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Teleport1 : MonoBehaviour
+public class Teleport2 : MonoBehaviour
 {
-    public Transform LimitUp;
+    public Transform LimitSx;
     public GameObject Ship;
-    
+    // Start is called before the first frame update
     void Start()
     {
         
@@ -19,6 +19,6 @@ public class Teleport1 : MonoBehaviour
     }
     void OnTriggerEnter(Collider other)
     {
-        Ship.transform.position = LimitUp.transform.position;
+        Ship.transform.position = LimitSx.transform.position;
     }
 }
